@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YELO SHOP - PUBG UC</title>
+    <title>YELO SHOP - PUBG UC/KLAN & TIKTOK & INSTAGRAM</title>
     <style>
         :root {
             --bg: #060608;
@@ -39,53 +39,40 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* === Video Arxa Plan === */
+        /* Video arxa plan */
         .video-background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -2;
             overflow: hidden;
         }
         .video-background video {
-            min-width: 100%;
-            min-height: 100%;
+            min-width: 100%; min-height: 100%;
             object-fit: cover;
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
-        /* Videonun üstünə qaranlıq örtük (oxunaqlılıq üçün) */
         .video-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
-            pointer-events: none;
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: -1; pointer-events: none;
         }
-
-        /* Grid örtüyü (dizayn detalı olaraq saxlanılıb) */
         .grid-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 0;
             opacity: 0.03;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
             background-size: 50px 50px;
             mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
             -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
         }
 
-        /* === iOS üslublu sistem fontu === */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
-            background: transparent; /* Arxa plan rəngini videoya görə sıfırladıq */
+            background: transparent;
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
@@ -93,1010 +80,701 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Loqo, başlıqlar və xüsusi mətnlər üçün */
-        .logo-text,
-        .section-title,
-        .btn-submit,
-        .package-uc,
-        .payment-card-number {
+        .logo-text, .section-title, .btn-submit, .package-uc, .payment-card-number {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             letter-spacing: 0.5px;
         }
 
+        /* --- NAVBAR --- */
+        .nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10, 10, 16, 0.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0 16px;
+            display: flex; justify-content: center;
+            overflow-x: auto; white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .nav::-webkit-scrollbar { display: none; }
+        .nav-list {
+            display: flex; gap: 6px;
+            list-style: none; padding: 8px 0;
+        }
+        .nav-item a {
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 18px; border-radius: 40px;
+            color: var(--text-secondary); text-decoration: none;
+            font-weight: 600; font-size: 14px;
+            transition: var(--transition); letter-spacing: 0.3px;
+            background: transparent; border: 1px solid transparent;
+        }
+        .nav-item a:hover {
+            background: rgba(255, 255, 255, 0.06); color: #fff;
+        }
+        .nav-item a.active {
+            background: var(--gold); color: #000;
+            border-color: var(--gold); font-weight: 700;
+            box-shadow: 0 0 16px rgba(240, 185, 11, 0.4);
+        }
+        .nav-icon-img {
+            width: 48px;           /* ← 48x48 ölçüdə loqo */
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 4px rgba(0,0,0,0.3));
+            transition: var(--transition);
+        }
+        .nav-item a.active .nav-icon-img {
+            filter: drop-shadow(0 0 6px rgba(0,0,0,0.5));
+        }
+
         .main-container {
-            position: relative;
-            z-index: 1;
-            max-width: 1100px;
-            margin: 0 auto;
+            position: relative; z-index: 1;
+            max-width: 1100px; margin: 0 auto;
             padding: 20px 24px 40px;
         }
+
         .header {
-            text-align: center;
-            padding: 30px 20px 10px;
-            position: relative;
-            z-index: 1;
+            text-align: center; padding: 30px 20px 10px;
+            position: relative; z-index: 1;
         }
-        .logo-icon {
-            font-size: 52px;
-            display: block;
-            text-align: center;
-            animation: logoPulse 2.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px rgba(240, 185, 11, 0.5));
-        }
-        @keyframes logoPulse {
-            0%,
-            100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 20px rgba(240, 185, 11, 0.5));
-            }
-            50% {
-                transform: scale(1.08);
-                filter: drop-shadow(0 0 35px rgba(240, 185, 11, 0.75));
-            }
-        }
-        .logo-text {
-            font-size: clamp(36px, 6vw, 54px);
-            font-weight: 900;
-            background: linear-gradient(180deg, #fcd535 0%, #f0b90b 40%, #c99a08 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 2px 8px rgba(240, 185, 11, 0.4));
-            display: block;
-            line-height: 1.1;
-        }
-        .logo-subtitle {
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 6px;
-            color: var(--gold-light);
-            opacity: 0.8;
-            display: block;
-            margin-top: 2px;
+        .header-logo {
+            display: block; margin: 0 auto;
+            max-width: 220px; height: auto;
         }
         .header-divider {
-            width: 80px;
-            height: 2px;
+            width: 80px; height: 2px;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 16px auto 0;
-            border-radius: 2px;
+            margin: 16px auto 0; border-radius: 2px;
         }
+        .account-banner {
+            text-align: center; margin: 14px 0 10px;
+            font-weight: 600; font-size: 14px;
+            color: var(--gold-light);
+            background: rgba(240, 185, 11, 0.08);
+            display: inline-block; padding: 8px 20px;
+            border-radius: 30px; letter-spacing: 0.5px;
+            border: 1px solid rgba(240, 185, 11, 0.2);
+        }
+
         .section-title {
             font-size: clamp(18px, 3vw, 22px);
-            font-weight: 700;
-            text-align: center;
-            color: var(--text);
-            margin-bottom: 6px;
-            position: relative;
-            z-index: 1;
+            font-weight: 700; text-align: center;
+            color: var(--text); margin-bottom: 6px;
         }
         .section-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 13px;
-            margin-bottom: 24px;
-            position: relative;
-            z-index: 1;
+            text-align: center; color: var(--text-secondary);
+            font-size: 13px; margin-bottom: 24px;
         }
-        .packages-section {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 32px;
-        }
+
         .packages-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            gap: 12px; margin-bottom: 20px;
         }
-        @media (max-width: 900px) {
-            .packages-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-            }
-        }
-        @media (max-width: 600px) {
-            .packages-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-        }
-        @media (max-width: 380px) {
-            .packages-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 7px;
-            }
-        }
+        @media (max-width: 900px) { .packages-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+        @media (max-width: 600px) { .packages-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
+        @media (max-width: 380px) { .packages-grid { grid-template-columns: 1fr 1fr; gap: 7px; } }
+
         .package-card {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: var(--radius);
-            padding: 16px 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            padding: 16px 12px; cursor: pointer;
+            transition: var(--transition); text-align: center;
+            position: relative; overflow: hidden;
+            user-select: none; -webkit-tap-highlight-color: transparent;
         }
         .package-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at center, rgba(240, 185, 11, 0.08) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            border-radius: var(--radius);
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, rgba(240,185,11,0.08) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s;
+            pointer-events: none; border-radius: var(--radius);
         }
-        .package-card:hover {
-            border-color: #4a4a55;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
-        }
-        .package-card:hover::after {
-            opacity: 1;
-        }
-        .package-card:active {
-            transform: scale(0.96);
-            transition: 0.1s;
-        }
+        .package-card:hover { border-color: #4a4a55; transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.5); }
+        .package-card:hover::after { opacity: 1; }
+        .package-card:active { transform: scale(0.96); transition: 0.1s; }
         .package-card.selected {
             border-color: var(--border-active) !important;
-            background: var(--surface2);
-            box-shadow: var(--glow);
+            background: var(--surface2); box-shadow: var(--glow);
             animation: selectedGlow 1.8s ease-in-out infinite;
             transform: translateY(-2px);
         }
         @keyframes selectedGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(240, 185, 11, 0.2), 0 0 40px rgba(240, 185, 11, 0.08);
-            }
-            50% {
-                box-shadow: 0 0 30px rgba(240, 185, 11, 0.35), 0 0 60px rgba(240, 185, 11, 0.15);
-            }
+            0%,100% { box-shadow: 0 0 20px rgba(240,185,11,0.2), 0 0 40px rgba(240,185,11,0.08); }
+            50% { box-shadow: 0 0 30px rgba(240,185,11,0.35), 0 0 60px rgba(240,185,11,0.15); }
         }
-        .package-card.selected .check-badge {
-            opacity: 1;
-            transform: scale(1);
-        }
+        .package-card.selected .check-badge { opacity: 1; transform: scale(1); }
         .check-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 26px;
-            height: 26px;
-            background: var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #000;
-            font-weight: 700;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: var(--transition);
-            z-index: 2;
-            box-shadow: 0 2px 10px rgba(240, 185, 11, 0.5);
+            position: absolute; top: 8px; right: 8px;
+            width: 26px; height: 26px;
+            background: var(--gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: #000; font-weight: 700;
+            opacity: 0; transform: scale(0.5); transition: var(--transition);
+            z-index: 2; box-shadow: 0 2px 10px rgba(240,185,11,0.5);
         }
-        .package-uc {
-            font-size: clamp(16px, 2.5vw, 20px);
-            font-weight: 800;
-            color: #fff;
-            position: relative;
-            z-index: 1;
-        }
-        .package-uc span {
-            color: var(--gold-light);
-        }
-        .package-price {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gold-light);
-            margin-top: 2px;
-        }
+        .package-uc { font-size: clamp(16px, 2.5vw, 20px); font-weight: 800; color: #fff; }
+        .package-uc span { color: var(--gold-light); }
+        .package-price { font-size: 13px; font-weight: 600; color: var(--gold-light); margin-top: 2px; }
         .package-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            background: rgba(240, 185, 11, 0.15);
-            color: var(--gold-light);
-            padding: 3px 8px;
-            border-radius: 20px;
-            margin-top: 6px;
+            display: inline-block; font-size: 10px; font-weight: 600;
+            background: rgba(240,185,11,0.15); color: var(--gold-light);
+            padding: 3px 8px; border-radius: 20px; margin-top: 6px;
         }
-        .package-badge.best {
-            background: rgba(240, 185, 11, 0.25);
-            color: #fff;
-            font-weight: 700;
-            animation: badgeShine 2s ease-in-out infinite;
-        }
+        .package-badge.best { background: rgba(240,185,11,0.25); color: #fff; font-weight: 700; animation: badgeShine 2s ease-in-out infinite; }
         @keyframes badgeShine {
-            0%,
-            100% {
-                background: rgba(240, 185, 11, 0.25);
-            }
-            50% {
-                background: rgba(240, 185, 11, 0.4);
-            }
+            0%,100% { background: rgba(240,185,11,0.25); }
+            50% { background: rgba(240,185,11,0.4); }
         }
+
         .form-section {
-            position: relative;
-            z-index: 1;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 28px 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--card-shadow);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 28px 24px;
+            margin: 32px 0 24px; box-shadow: var(--card-shadow);
         }
         .form-row {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            align-items: flex-end;
+            display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end;
         }
         @media (max-width: 700px) {
-            .form-row {
-                flex-direction: column;
-                gap: 14px;
-            }
-            .form-section {
-                padding: 20px 16px;
-            }
+            .form-row { flex-direction: column; gap: 14px; }
+            .form-section { padding: 20px 16px; }
         }
-        .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
+        .form-group { flex: 1; min-width: 200px; }
         .form-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 7px;
+            display: block; font-size: 12px; font-weight: 600;
+            letter-spacing: 0.8px; text-transform: uppercase;
+            color: var(--text-secondary); margin-bottom: 7px;
         }
         .form-input {
-            width: 100%;
-            padding: 13px 16px;
-            background: var(--surface2);
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: #fff;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 500;
-            transition: var(--transition);
-            outline: none;
+            width: 100%; padding: 13px 16px;
+            background: var(--surface2); border: 2px solid var(--border);
+            border-radius: var(--radius-sm); color: #fff;
+            font-family: inherit; font-size: 15px; font-weight: 500;
+            transition: var(--transition); outline: none;
         }
-        .form-input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(240, 185, 11, 0.08);
-        }
-        .form-input::placeholder {
-            color: #555;
-            font-weight: 400;
-        }
+        .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(240,185,11,0.08); }
+        .form-input::placeholder { color: #555; font-weight: 400; }
         .upload-area {
-            position: relative;
-            border: 2px dashed var(--border);
-            border-radius: var(--radius);
-            padding: 22px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            background: var(--surface2);
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            overflow: hidden;
+            position: relative; border: 2px dashed var(--border);
+            border-radius: var(--radius); padding: 22px 20px;
+            text-align: center; cursor: pointer; transition: var(--transition);
+            background: var(--surface2); min-height: 100px;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; gap: 8px; overflow: hidden;
         }
-        .upload-area:hover {
-            border-color: #5a5a68;
-            background: #1a1a24;
-        }
+        .upload-area:hover { border-color: #5a5a68; background: #1a1a24; }
         .upload-area.has-file {
-            border-color: var(--success);
-            border-style: solid;
-            background: rgba(46, 204, 113, 0.04);
+            border-color: var(--success); border-style: solid;
+            background: rgba(46,204,113,0.04);
         }
-        .upload-icon {
-            font-size: 36px;
-            transition: var(--transition);
-        }
-        .upload-area.has-file .upload-icon {
-            font-size: 30px;
-        }
-        .upload-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        .upload-area.has-file .upload-text {
-            color: var(--success);
-        }
+        .upload-icon { font-size: 36px; transition: var(--transition); }
+        .upload-area.has-file .upload-icon { font-size: 30px; }
+        .upload-text { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+        .upload-area.has-file .upload-text { color: var(--success); }
         .upload-preview {
-            max-width: 100%;
-            max-height: 140px;
-            border-radius: 8px;
-            display: none;
-            object-fit: contain;
-            border: 1px solid var(--border);
+            max-width: 100%; max-height: 140px; border-radius: 8px;
+            display: none; object-fit: contain; border: 1px solid var(--border);
         }
-        .upload-area.has-file .upload-preview {
-            display: block;
-        }
-        .upload-area.has-file .upload-placeholder-group {
-            display: none;
-        }
-        .upload-placeholder-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-        .upload-hint {
-            font-size: 10px;
-            color: #555;
-        }
+        .upload-area.has-file .upload-preview { display: block; }
+        .upload-area.has-file .upload-placeholder-group { display: none; }
+        .upload-placeholder-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .upload-hint { font-size: 10px; color: #555; }
         .remove-upload {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: rgba(231, 76, 60, 0.8);
-            border: none;
-            color: #fff;
-            font-size: 14px;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 3;
-            transition: var(--transition);
-            line-height: 1;
+            position: absolute; top: 8px; right: 8px;
+            width: 26px; height: 26px; border-radius: 50%;
+            background: rgba(231,76,60,0.8); border: none;
+            color: #fff; font-size: 14px; cursor: pointer;
+            display: none; align-items: center; justify-content: center;
+            z-index: 3; transition: var(--transition); line-height: 1;
         }
-        .upload-area.has-file .remove-upload {
-            display: flex;
-        }
-        .remove-upload:hover {
-            background: #e74c3c;
-            transform: scale(1.1);
-        }
+        .upload-area.has-file .remove-upload { display: flex; }
+        .remove-upload:hover { background: #e74c3c; transform: scale(1.1); }
+
         .selected-package-display {
-            text-align: center;
-            min-height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--text-secondary);
-            padding: 6px 0;
+            text-align: center; min-height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; font-weight: 500; font-size: 14px;
+            color: var(--text-secondary); padding: 6px 0;
         }
-        .selected-package-display.active {
-            color: #fff;
-            font-weight: 600;
-        }
-        .selected-package-display .highlight {
-            color: var(--gold-light);
-            font-weight: 700;
-        }
+        .selected-package-display.active { color: #fff; font-weight: 600; }
+        .selected-package-display .highlight { color: var(--gold-light); font-weight: 700; }
+
         .btn-submit {
-            display: block;
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto 0;
-            padding: 16px 32px;
+            display: block; width: 100%; max-width: 400px;
+            margin: 20px auto 0; padding: 16px 32px;
             background: linear-gradient(135deg, #f0b90b 0%, #d4a30a 50%, #b8890a 100%);
-            border: none;
-            border-radius: 50px;
-            color: #000;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            text-transform: uppercase;
-            box-shadow: 0 6px 24px rgba(240, 185, 11, 0.3);
+            border: none; border-radius: 50px; color: #000;
+            font-size: 16px; font-weight: 700; cursor: pointer;
+            transition: var(--transition); text-transform: uppercase;
+            box-shadow: 0 6px 24px rgba(240,185,11,0.3);
         }
-        .btn-submit:hover {
-            box-shadow: 0 10px 36px rgba(240, 185, 11, 0.5);
-            transform: translateY(-2px);
-        }
-        .btn-submit:active {
-            transform: scale(0.96);
-            box-shadow: 0 4px 16px rgba(240, 185, 11, 0.25);
-            transition: 0.1s;
-        }
-        .btn-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-            filter: grayscale(30%);
-        }
+        .btn-submit:hover { box-shadow: 0 10px 36px rgba(240,185,11,0.5); transform: translateY(-2px); }
+        .btn-submit:active { transform: scale(0.96); box-shadow: 0 4px 16px rgba(240,185,11,0.25); transition: 0.1s; }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; filter: grayscale(30%); }
         .btn-submit .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2.5px solid #000;
-            border-top: 2.5px solid transparent;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin-right: 10px;
-            vertical-align: middle;
+            display: none; width: 20px; height: 20px;
+            border: 2.5px solid #000; border-top: 2.5px solid transparent;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+            margin-right: 10px; vertical-align: middle;
         }
-        .btn-submit.loading .spinner {
-            display: inline-block;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        .btn-submit.loading .spinner { display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         .payment-card {
             background: linear-gradient(145deg, #1a1a24 0%, #12121a 100%);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 24px 28px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            box-shadow: var(--card-shadow);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 24px;
+            border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 24px 28px; display: flex; align-items: center;
+            gap: 20px; flex-wrap: wrap; box-shadow: var(--card-shadow);
+            position: relative; overflow: hidden; margin-bottom: 24px;
         }
         .payment-card::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(240, 185, 11, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
+            content: ''; position: absolute; top: -40px; right: -40px;
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, rgba(240,185,11,0.1) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none;
         }
         @media (max-width: 550px) {
-            .payment-card {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 18px 16px;
-                gap: 12px;
-            }
+            .payment-card { flex-direction: column; align-items: flex-start; padding: 18px 16px; gap: 12px; }
         }
-        .payment-icon {
-            font-size: 40px;
-            flex-shrink: 0;
-            filter: drop-shadow(0 0 8px rgba(240, 185, 11, 0.3));
-        }
-        .payment-details {
-            flex: 1;
-            min-width: 180px;
-            position: relative;
-            z-index: 1;
-        }
-        .payment-label {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        .payment-card-number {
-            font-size: clamp(17px, 3vw, 22px);
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #fff;
-            word-break: break-all;
-        }
-        .payment-bank {
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--gold-light);
-            letter-spacing: 1px;
-            margin-top: 2px;
-        }
+        .payment-icon { font-size: 40px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(240,185,11,0.3)); }
+        .payment-details { flex: 1; min-width: 180px; z-index: 1; }
+        .payment-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+        .payment-card-number { font-size: clamp(17px, 3vw, 22px); font-weight: 700; letter-spacing: 3px; color: #fff; word-break: break-all; }
+        .payment-bank { font-size: 11px; font-weight: 500; color: var(--gold-light); letter-spacing: 1px; margin-top: 2px; }
         .copy-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #ccc;
-            padding: 9px 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            transition: var(--transition);
-            white-space: nowrap;
-            z-index: 1;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+            color: #ccc; padding: 9px 16px; border-radius: 25px;
+            cursor: pointer; font-size: 12px; font-weight: 500;
+            transition: var(--transition); white-space: nowrap; z-index: 1;
         }
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #fff;
-        }
-        .copy-btn.copied {
-            background: rgba(46, 204, 113, 0.2);
-            border-color: var(--success);
-            color: var(--success);
-        }
+        .copy-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); color: #fff; }
+        .copy-btn.copied { background: rgba(46,204,113,0.2); border-color: var(--success); color: var(--success); }
+
         .whatsapp-float {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            z-index: 999;
-            width: 60px;
-            height: 60px;
-            background: var(--whatsapp);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
-            transition: var(--transition);
-            text-decoration: none;
+            position: fixed; bottom: 28px; right: 28px; z-index: 999;
+            width: 60px; height: 60px; background: var(--whatsapp);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+            transition: var(--transition); text-decoration: none;
             animation: waPulse 2.2s ease-in-out infinite;
         }
-        .whatsapp-float:hover {
-            transform: scale(1.12);
-            box-shadow: 0 10px 36px rgba(37, 211, 102, 0.6);
-            background: #20bd5a;
-        }
+        .whatsapp-float:hover { transform: scale(1.12); box-shadow: 0 10px 36px rgba(37,211,102,0.6); background: #20bd5a; }
         @keyframes waPulse {
-            0%,
-            100% {
-                box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
-            }
-            50% {
-                box-shadow: 0 6px 40px rgba(37, 211, 102, 0.7), 0 0 0 16px rgba(37, 211, 102, 0);
-            }
+            0%,100% { box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
+            50% { box-shadow: 0 6px 40px rgba(37,211,102,0.7), 0 0 0 16px rgba(37,211,102,0); }
         }
         .whatsapp-tooltip {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            z-index: 998;
-            background: #1a1a24;
-            color: #fff;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: var(--transition);
-            border: 1px solid var(--border);
-            white-space: nowrap;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+            position: fixed; bottom: 100px; right: 20px; z-index: 998;
+            background: #1a1a24; color: #fff; padding: 10px 16px;
+            border-radius: 20px; font-size: 12px; font-weight: 500;
+            pointer-events: none; opacity: 0; transform: translateY(10px);
+            transition: var(--transition); border: 1px solid var(--border);
+            white-space: nowrap; letter-spacing: 0.5px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         }
-        .whatsapp-tooltip.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .whatsapp-tooltip.visible { opacity: 1; transform: translateY(0); }
+
         .toast-container {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
+            position: fixed; top: 24px; right: 24px; z-index: 1000;
+            display: flex; flex-direction: column; gap: 10px; pointer-events: none;
         }
         .toast {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            padding: 14px 20px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 13px;
-            font-weight: 500;
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+            background: var(--surface2); border: 1px solid var(--border);
+            padding: 14px 20px; border-radius: 12px; color: #fff;
+            font-size: 13px; font-weight: 500; box-shadow: 0 8px 28px rgba(0,0,0,0.5);
             animation: slideIn 0.4s ease-out, fadeOut 0.35s ease-in forwards;
-            animation-delay: 0s, 2.5s;
-            pointer-events: auto;
-            max-width: 380px;
-            letter-spacing: 0.3px;
+            animation-delay: 0s, 2.5s; pointer-events: auto; max-width: 380px;
         }
-        .toast.success {
-            border-left: 3px solid var(--success);
-        }
-        .toast.error {
-            border-left: 3px solid var(--danger);
-        }
-        .toast.info {
-            border-left: 3px solid var(--gold);
-        }
+        .toast.success { border-left: 3px solid var(--success); }
+        .toast.error { border-left: 3px solid var(--danger); }
+        .toast.info { border-left: 3px solid var(--gold); }
         @keyframes slideIn {
-            from {
-                transform: translateX(120%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(60%);
-            }
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(60%); }
         }
+
         .footer {
-            text-align: center;
-            padding: 20px;
-            color: #aaa;
-            font-size: 11px;
-            letter-spacing: 0.8px;
-            position: relative;
-            z-index: 1;
+            text-align: center; padding: 20px; color: #aaa;
+            font-size: 11px; letter-spacing: 0.8px; position: relative; z-index: 1;
         }
-        .footer span {
-            color: var(--gold-dark);
-            font-weight: 600;
-        }
+        .footer span { color: var(--gold-dark); font-weight: 600; }
+
         .selection-summary {
-            background: var(--surface2);
-            border-radius: var(--radius-sm);
-            padding: 10px 16px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            text-align: center;
-            letter-spacing: 0.3px;
-            transition: var(--transition);
-            border: 1px solid transparent;
+            background: var(--surface2); border-radius: var(--radius-sm);
+            padding: 10px 16px; margin-top: 12px; font-size: 13px;
+            color: var(--text-secondary); text-align: center;
+            transition: var(--transition); border: 1px solid transparent;
         }
         .selection-summary.filled {
-            border-color: var(--border-active);
-            color: #fff;
-            background: rgba(240, 185, 11, 0.04);
+            border-color: var(--border-active); color: #fff;
+            background: rgba(240,185,11,0.04);
         }
-        .selection-summary strong {
-            color: var(--gold-light);
-        }
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2a2a35;
-            border-radius: 10px;
-        }
+        .selection-summary strong { color: var(--gold-light); }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 10px; }
     </style>
 </head>
 <body>
-
-    <!-- Video Arxa Plan -->
     <div class="video-background">
-        <!--
-        ============================================
-        VİDEO FAYLINI BURADA DƏYİŞDİR:
-        Öz mp4 faylının adını "bg.mp4" əvəzinə yaz.
-        Məs: src="pubg-bg.mp4"
-        ============================================
-        -->
         <video autoplay muted loop playsinline>
             <source src="bg.mp4" type="video/mp4">
             Brauzeriniz video formatını dəstəkləmir.
         </video>
     </div>
-    <!-- Qaranlıq overlay (oxunaqlılıq üçün) -->
     <div class="video-overlay"></div>
-
-    <!-- Grid örtüyü (nazik xətlər) -->
     <div class="grid-overlay"></div>
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
     <div class="whatsapp-tooltip" id="waTooltip">💬 WhatsApp ilə əlaqə</div>
 
     <a href="https://wa.me/994513084409?text=Salam,%20YELO%20SHOP-dan%20UC%20sifari%C5%9F%20etm%C9%99k%20ist%C9%99yir%C9%99m."
-    class="whatsapp-float" id="whatsappBtn" target="_blank" rel="noopener noreferrer"
-    onmouseenter="document.getElementById('waTooltip').classList.add('visible')"
-    onmouseleave="document.getElementById('waTooltip').classList.remove('visible')"
-    onclick="document.getElementById('waTooltip').classList.remove('visible')">
-    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-</a>
+       class="whatsapp-float" id="whatsappBtn" target="_blank" rel="noopener"
+       onmouseenter="document.getElementById('waTooltip').classList.add('visible')"
+       onmouseleave="document.getElementById('waTooltip').classList.remove('visible')"
+       onclick="document.getElementById('waTooltip').classList.remove('visible')">
+       <svg viewBox="0 0 24 24"><path d="M17.472 14.382..."/></svg>
+    </a>
 
-<header class="header">
-    <span class="logo-icon">🛒</span>
-    <span class="logo-text">YELO SHOP</span>
-    <span class="logo-subtitle">PUBG UC</span>
-    <div class="header-divider"></div>
-</header>
+    <header class="header">
+        <img src="img/yelo-logo.png" alt="YELO SHOP" class="header-logo">
+        <div class="header-divider"></div>
+        <div class="account-banner">Hesab Alqı-Satqısı mövcuddur!</div>
+    </header>
 
-<div class="main-container">
-    <section class="packages-section">
-        <h2 class="section-title">💎 UC Paketləri</h2>
-        <p class="section-subtitle">Aşağıdan istədiyiniz paketi seçin</p>
-        <div class="packages-grid" id="packagesGrid"></div>
-        <div class="selected-package-display" id="selectedPackageDisplay">📦 Hələ paket seçilməyib</div>
-    </section>
+    <nav class="nav" id="mainNav">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="#uc" class="active" data-target="uc"><img src="img/uc-logo.png" alt="UC" class="nav-icon-img"> UC</a></li>
+            <li class="nav-item"><a href="#klan" data-target="klan"><img src="img/klan-logo.png" alt="KLAN" class="nav-icon-img"> KLAN</a></li>
+            <li class="nav-item"><a href="#tiktok" data-target="tiktok"><img src="img/tiktok-logo.png" alt="TikTok" class="nav-icon-img"> TikTok</a></li>
+            <li class="nav-item"><a href="#instagram" data-target="instagram"><img src="img/instagram-logo.png" alt="Instagram" class="nav-icon-img"> Instagram</a></li>
+        </ul>
+    </nav>
 
-    <section class="form-section">
-        <h2 class="section-title" style="font-size:18px; margin-bottom:6px;">📝 Sifariş Forması</h2>
-        <p class="section-subtitle" style="margin-bottom:18px;">Məlumatları doldurun və qəbz şəklini yükləyin</p>
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label" for="playerId">🎮 Oyunçu ID</label>
-                <input type="text" class="form-input" id="playerId" placeholder="Məs: 5123456789" maxlength="20">
-            </div>
-            <div class="form-group">
-                <label class="form-label">📸 Qəbz Şəkli</label>
-                <div class="upload-area" id="uploadArea" onclick="document.getElementById('receiptInput').click()">
-                    <div class="upload-placeholder-group">
-                        <span class="upload-icon">📤</span>
-                        <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
-                        <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
-                    </div>
-                    <img class="upload-preview" id="uploadPreview" alt="Önizləmə">
-                    <button class="remove-upload" id="removeUpload" onclick="removeFile(event)">✕</button>
+    <div class="main-container">
+        <section id="uc" class="service-section">
+            <h2 class="section-title">💎 UC Paketləri</h2>
+            <p class="section-subtitle">Aşağıdan istədiyiniz paketi seçin</p>
+            <div class="packages-grid" id="ucGrid"></div>
+            <div class="selected-package-display" id="ucSelectedDisplay">📦 Hələ UC seçilməyib</div>
+        </section>
+
+        <section id="klan" class="service-section">
+            <h2 class="section-title">🛡️ KLAN Səviyyələri</h2>
+            <p class="section-subtitle">Klanınızı yüksəltmək üçün seçim edin</p>
+            <div class="packages-grid" id="klanGrid"></div>
+            <div class="selected-package-display" id="klanSelectedDisplay">📦 Hələ KLAN seçilməyib</div>
+        </section>
+
+        <section id="tiktok" class="service-section">
+            <h2 class="section-title">🎵 TikTok Xidmətləri</h2>
+            <p class="section-subtitle">(Bu bölməni özünüz dolduracaqsınız)</p>
+        </section>
+
+        <section id="instagram" class="service-section">
+            <h2 class="section-title">📷 Instagram Xidmətləri</h2>
+            <p class="section-subtitle">(Bu bölməni özünüz dolduracaqsınız)</p>
+        </section>
+
+        <section class="form-section">
+            <h2 class="section-title" style="font-size:18px; margin-bottom:6px;">📝 Sifariş Forması</h2>
+            <p class="section-subtitle" style="margin-bottom:18px;">Məlumatları doldurun və qəbz şəklini yükləyin</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="playerId">🎮 Oyunçu ID</label>
+                    <input type="text" class="form-input" id="playerId" placeholder="Məs: 5123456789" maxlength="20">
                 </div>
-                <input type="file" id="receiptInput" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleFileSelect(event)">
+                <div class="form-group">
+                    <label class="form-label">📸 Qəbz Şəkli</label>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('receiptInput').click()">
+                        <div class="upload-placeholder-group">
+                            <span class="upload-icon">📤</span>
+                            <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
+                            <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
+                        </div>
+                        <img class="upload-preview" id="uploadPreview" alt="Önizləmə">
+                        <button class="remove-upload" id="removeUpload" onclick="removeFile(event)">✕</button>
+                    </div>
+                    <input type="file" id="receiptInput" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleFileSelect(event)">
+                </div>
             </div>
-        </div>
-        <div class="selection-summary" id="selectionSummary">📋 Seçilmiş paket, Oyunçu ID və Qəbz hamısı birlikdə göndəriləcək</div>
-        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">
-            <span class="spinner"></span> <span class="btn-text">🚀 Göndər</span>
-        </button>
-    </section>
+            <div class="selection-summary" id="selectionSummary">📋 Seçilmiş xidmət, ID və Qəbz birlikdə göndəriləcək</div>
+            <button class="btn-submit" id="submitBtn" onclick="submitOrder()">
+                <span class="spinner"></span> <span class="btn-text">🚀 Göndər</span>
+            </button>
+        </section>
 
-    <section>
-        <div class="payment-card">
-            <span class="payment-icon">🏦</span>
-            <div class="payment-details">
-                <p class="payment-label">Bank Kartı</p>
-                <p class="payment-card-number">5411 2498 1204 7533</p>
-                <p class="payment-bank">UNIBANK</p>
+        <section>
+            <div class="payment-card">
+                <span class="payment-icon">🏦</span>
+                <div class="payment-details">
+                    <p class="payment-label">Bank Kartı</p>
+                    <p class="payment-card-number">5411 2498 1204 7533</p>
+                    <p class="payment-bank">UNIBANK</p>
+                </div>
+                <button class="copy-btn" id="copyCardBtn" onclick="copyCardNumber()">📋 Kopyala</button>
             </div>
-            <button class="copy-btn" id="copyCardBtn" onclick="copyCardNumber()">📋 Kopyala</button>
-        </div>
-    </section>
+        </section>
 
-    <footer class="footer">
-        © 2026 <span>YELO SHOP</span> • Bütün hüquqlar qorunur • +994 51 308 44 09
-    </footer>
-</div>
+        <footer class="footer">
+            © 2026 <span>YELO SHOP</span> • Bütün hüquqlar qorunur • +994 51 308 44 09
+        </footer>
+    </div>
 
-<script>
-    // ============================================
-    // ⚙️ BURAYA ÖZ BOT MƏLUMATLARINIZI YAZIN
-    // ============================================
-    const BOT_TOKEN = '8083741609:AAEnPt_Sa01wHAazKg--uXJH8cGIDdzaibA';   // @BotFather-dən alınan token
-    const CHAT_ID = '6436992668';       // Sifarişlərin gedəcəyi chat ID
-    // ============================================
+    <script>
+        // ================= TELEGRAM BOT =================
+        const BOT_TOKEN = '8083741609:AAEnPt_Sa01wHAazKg--uXJH8cGIDdzaibA';
+        const CHAT_ID = '6436992668';
+        // ===============================================
 
-    const packages = [
-        { uc: 60, price: 2, badge: null },
-        { uc: 120, price: 4, badge: null },
-        { uc: 180, price: 5, badge: 'Populyar' },
-        { uc: 325, price: 9, badge: null },
-        { uc: 385, price: 11, badge: null },
-        { uc: 660, price: 17, badge: 'Əla Təklif' },
-        { uc: 720, price: 19, badge: null },
-        { uc: 1045, price: 26, badge: null },
-        { uc: 1320, price: 33, badge: 'Best' },
-        { uc: 1800, price: 39, badge: null },
-        { uc: 1980, price: 44, badge: null },
-        { uc: 3850, price: 79, badge: 'Premium' },
-        { uc: 8100, price: 153, badge: 'Maksimum' }
-    ];
+        const ucPackages = [
+            { uc: 60, price: 2, badge: null },
+            { uc: 120, price: 4, badge: null },
+            { uc: 180, price: 5, badge: 'Populyar' },
+            { uc: 325, price: 9, badge: null },
+            { uc: 385, price: 11, badge: null },
+            { uc: 660, price: 17, badge: 'Əla Təklif' },
+            { uc: 720, price: 19, badge: null },
+            { uc: 1045, price: 26, badge: null },
+            { uc: 1320, price: 33, badge: 'Best' },
+            { uc: 1800, price: 39, badge: null },
+            { uc: 1980, price: 44, badge: null },
+            { uc: 3850, price: 79, badge: 'Premium' },
+            { uc: 8100, price: 153, badge: 'Maksimum' }
+        ];
 
-    let selectedPackage = null;
-    let receiptFile = null;
+        const klanPackages = [
+            { level: 7, price: 15 },
+            { level: 8, price: 20 },
+            { level: 9, price: 25 },
+            { level: 10, price: 30 }
+        ];
 
-    function renderPackages() {
-        const grid = document.getElementById('packagesGrid');
-        grid.innerHTML = packages.map((pkg, i) => {
-            const isBest = pkg.badge === 'Best' || pkg.badge === 'Əla Təklif' || pkg.badge === 'Premium' || pkg.badge === 'Maksimum';
-            return `
-                <div class="package-card" data-index="${i}" data-uc="${pkg.uc}" data-price="${pkg.price}" onclick="selectPackage(${i}, this)">
-                    <div class="check-badge">✓</div>
-                    <div class="package-uc"><span>${pkg.uc}</span> UC</div>
-                    <div class="package-price">${pkg.price} AZN</div>
-                    ${pkg.badge ? `<div class="package-badge ${isBest ? 'best' : ''}">${pkg.badge}</div>` : ''}
-                </div>`;
-        }).join('');
-    }
+        let currentSection = 'uc';
+        let selectedUc = null;
+        let selectedKlan = null;
+        let receiptFile = null;
 
-    function selectPackage(index, el) {
-        document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        selectedPackage = packages[index];
-        const disp = document.getElementById('selectedPackageDisplay');
-        disp.innerHTML = `✅ Seçildi: <span class="highlight">${selectedPackage.uc} UC</span> — <strong>${selectedPackage.price} AZN</strong>`;
-        disp.classList.add('active');
-        updateSummary();
-        if (window.innerWidth < 700) document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function handleFileSelect(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.size > 10 * 1024 * 1024) return showToast('❌ Fayl çox böyükdür! Maksimum 10MB.', 'error');
-        if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) return showToast('❌ Yalnız PNG, JPG, JPEG.', 'error');
-        receiptFile = file;
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            document.getElementById('uploadPreview').src = ev.target.result;
-            document.getElementById('uploadArea').classList.add('has-file');
-            document.querySelector('.upload-text').textContent = file.name;
-        };
-        reader.readAsDataURL(file);
-        updateSummary();
-    }
-
-    function removeFile(e) {
-        e.stopPropagation();
-        receiptFile = null;
-        document.getElementById('receiptInput').value = '';
-        document.getElementById('uploadPreview').src = '';
-        document.getElementById('uploadArea').classList.remove('has-file');
-        document.querySelector('.upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-        updateSummary();
-    }
-
-    function updateSummary() {
-        const summary = document.getElementById('selectionSummary');
-        const playerId = document.getElementById('playerId').value.trim();
-        let parts = [];
-        if (selectedPackage) parts.push(`💎 <strong>${selectedPackage.uc} UC</strong> (${selectedPackage.price} AZN)`);
-        if (playerId) parts.push(`🎮 ID: <strong>${playerId}</strong>`);
-        if (receiptFile) parts.push(`📸 Qəbz: <strong>${receiptFile.name}</strong>`);
-        if (parts.length) {
-            summary.innerHTML = parts.join(' &nbsp;|&nbsp; ');
-            summary.classList.add('filled');
-        } else {
-            summary.innerHTML = '📋 Seçilmiş paket, Oyunçu ID və Qəbz hamısı birlikdə göndəriləcək';
-            summary.classList.remove('filled');
-        }
-    }
-
-    document.getElementById('playerId').addEventListener('input', updateSummary);
-
-    async function submitOrder() {
-        const playerId = document.getElementById('playerId').value.trim();
-        const btn = document.getElementById('submitBtn');
-
-        if (!selectedPackage) return showToast('⚠️ UC paketi seçin!', 'error');
-        if (!playerId) return showToast('⚠️ Oyunçu ID-ni daxil edin!', 'error');
-        if (!receiptFile) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
-
-        if (BOT_TOKEN === 'YOUR_BOT_TOKEN' || CHAT_ID === 'YOUR_CHAT_ID') {
-            return showToast('⚠️ Zəhmət olmasa öz BOT_TOKEN və CHAT_ID dəyərlərinizi daxil edin.', 'error');
+        function renderUc() {
+            const grid = document.getElementById('ucGrid');
+            grid.innerHTML = ucPackages.map((pkg, i) => {
+                const isBest = pkg.badge === 'Best' || pkg.badge === 'Əla Təklif' || pkg.badge === 'Premium' || pkg.badge === 'Maksimum';
+                return `
+                    <div class="package-card" data-index="${i}" onclick="selectUc(${i}, this)">
+                        <div class="check-badge">✓</div>
+                        <div class="package-uc"><span>${pkg.uc}</span> UC</div>
+                        <div class="package-price">${pkg.price} AZN</div>
+                        ${pkg.badge ? `<div class="package-badge ${isBest ? 'best' : ''}">${pkg.badge}</div>` : ''}
+                    </div>`;
+            }).join('');
         }
 
-        btn.disabled = true;
-        btn.classList.add('loading');
-        document.querySelector('.btn-text').textContent = 'Göndərilir...';
+        function renderKlan() {
+            const grid = document.getElementById('klanGrid');
+            grid.innerHTML = klanPackages.map((pkg, i) => {
+                return `
+                    <div class="package-card" data-index="${i}" onclick="selectKlan(${i}, this)">
+                        <div class="check-badge">✓</div>
+                        <div class="package-uc"><span>${pkg.level}</span> LEVEL</div>
+                        <div class="package-price">${pkg.price} AZN</div>
+                    </div>`;
+            }).join('');
+        }
 
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = now.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const caption = `🛒 *Yeni Sifariş!*\n\n🎮 *Oyunçu ID:* \`${playerId}\`\n💎 *UC Paketi:* ${selectedPackage.uc} UC\n💰 *Qiymət:* ${selectedPackage.price} AZN\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
+        function selectUc(index, el) {
+            document.querySelectorAll('#ucGrid .package-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedUc = ucPackages[index];
+            selectedKlan = null;
+            document.querySelectorAll('#klanGrid .package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('ucSelectedDisplay').innerHTML = `✅ Seçildi: <span class="highlight">${selectedUc.uc} UC</span> — <strong>${selectedUc.price} AZN</strong>`;
+            document.getElementById('ucSelectedDisplay').classList.add('active');
+            document.getElementById('klanSelectedDisplay').innerHTML = '📦 Hələ KLAN seçilməyib';
+            document.getElementById('klanSelectedDisplay').classList.remove('active');
+            currentSection = 'uc';
+            updateSummary();
+        }
 
-        try {
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', receiptFile);
-            formData.append('caption', caption);
-            formData.append('parse_mode', 'Markdown');
+        function selectKlan(index, el) {
+            document.querySelectorAll('#klanGrid .package-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedKlan = klanPackages[index];
+            selectedUc = null;
+            document.querySelectorAll('#ucGrid .package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('klanSelectedDisplay').innerHTML = `✅ Seçildi: <span class="highlight">${selectedKlan.level} LEVEL</span> — <strong>${selectedKlan.price} AZN</strong>`;
+            document.getElementById('klanSelectedDisplay').classList.add('active');
+            document.getElementById('ucSelectedDisplay').innerHTML = '📦 Hələ UC seçilməyib';
+            document.getElementById('ucSelectedDisplay').classList.remove('active');
+            currentSection = 'klan';
+            updateSummary();
+        }
 
-            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
-            const data = await res.json();
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) return showToast('❌ Fayl çox böyükdür! Maksimum 10MB.', 'error');
+            if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) return showToast('❌ Yalnız PNG, JPG, JPEG.', 'error');
+            receiptFile = file;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('uploadPreview').src = e.target.result;
+                document.getElementById('uploadArea').classList.add('has-file');
+                document.querySelector('.upload-text').textContent = file.name;
+            };
+            reader.readAsDataURL(file);
+            updateSummary();
+        }
 
-            if (data.ok) {
-                showToast('✅ Sifariş uğurla göndərildi!', 'success');
-                resetForm();
+        function removeFile(event) {
+            event.stopPropagation();
+            receiptFile = null;
+            document.getElementById('receiptInput').value = '';
+            document.getElementById('uploadPreview').src = '';
+            document.getElementById('uploadArea').classList.remove('has-file');
+            document.querySelector('.upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('selectionSummary');
+            const playerId = document.getElementById('playerId').value.trim();
+            const parts = [];
+            if (selectedUc) parts.push(`💎 <strong>${selectedUc.uc} UC</strong> (${selectedUc.price} AZN)`);
+            if (selectedKlan) parts.push(`🛡️ <strong>${selectedKlan.level} LEVEL</strong> (${selectedKlan.price} AZN)`);
+            if (playerId) parts.push(`🎮 ID: <strong>${playerId}</strong>`);
+            if (receiptFile) parts.push(`📸 Qəbz: <strong>${receiptFile.name}</strong>`);
+            if (parts.length) {
+                summary.innerHTML = parts.join(' &nbsp;|&nbsp; ');
+                summary.classList.add('filled');
             } else {
-                const textRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: caption + '\n\n⚠️ *Qeyd:* Qəbz şəkli yüklənmədi, zəhmət olmasa WhatsApp ilə göndərin.',
-                        parse_mode: 'Markdown'
-                    })
-                });
-                const textData = await textRes.json();
-                if (textData.ok) {
-                    showToast('⚠️ Qəbz şəkli göndərilmədi, məlumatlar getdi. WhatsApp ilə qəbzi göndərin.', 'info');
+                summary.innerHTML = '📋 Seçilmiş xidmət, ID və Qəbz birlikdə göndəriləcək';
+                summary.classList.remove('filled');
+            }
+        }
+
+        document.getElementById('playerId').addEventListener('input', updateSummary);
+
+        async function submitOrder() {
+            const playerId = document.getElementById('playerId').value.trim();
+            const btn = document.getElementById('submitBtn');
+
+            if (!selectedUc && !selectedKlan) return showToast('⚠️ UC və ya KLAN paketi seçin!', 'error');
+            if (!playerId) return showToast('⚠️ Oyunçu ID-ni daxil edin!', 'error');
+            if (!receiptFile) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
+            if (BOT_TOKEN === 'YOUR_BOT_TOKEN' || CHAT_ID === 'YOUR_CHAT_ID')
+                return showToast('⚠️ BOT_TOKEN və CHAT_ID dəyərlərini daxil edin.', 'error');
+
+            btn.disabled = true;
+            btn.classList.add('loading');
+            document.querySelector('.btn-text').textContent = 'Göndərilir...';
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let item = '';
+            if (selectedUc) item = `${selectedUc.uc} UC (${selectedUc.price} AZN)`;
+            else if (selectedKlan) item = `Level ${selectedKlan.level} KLAN (${selectedKlan.price} AZN)`;
+            const caption = `🛒 *Yeni Sifariş!*\n\n🎮 *Oyunçu ID:* \`${playerId}\`\n📦 *Xidmət:* ${item}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
+
+            try {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', receiptFile);
+                formData.append('caption', caption);
+                formData.append('parse_mode', 'Markdown');
+                const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.ok) {
+                    showToast('✅ Sifariş uğurla göndərildi!', 'success');
                     resetForm();
                 } else {
-                    throw new Error(textData.description || 'Mətn göndərilmədi');
+                    throw new Error(data.description || 'Xəta');
                 }
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Xəta! WhatsApp ilə əlaqə saxlayın.', 'error');
+                setTimeout(() => document.getElementById('whatsappBtn').click(), 1500);
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                document.querySelector('.btn-text').textContent = '🚀 Göndər';
             }
-        } catch (err) {
-            console.error(err);
-            showToast('❌ Xəta! WhatsApp ilə əlaqə saxlayın.', 'error');
-            setTimeout(() => document.getElementById('whatsappBtn').click(), 1500);
-        } finally {
-            btn.disabled = false;
-            btn.classList.remove('loading');
-            document.querySelector('.btn-text').textContent = '🚀 Göndər';
         }
-    }
 
-    function resetForm() {
-        selectedPackage = null;
-        receiptFile = null;
-        document.getElementById('playerId').value = '';
-        document.getElementById('receiptInput').value = '';
-        document.getElementById('uploadPreview').src = '';
-        document.getElementById('uploadArea').classList.remove('has-file');
-        document.querySelector('.upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-        document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
-        document.getElementById('selectedPackageDisplay').innerHTML = '📦 Hələ paket seçilməyib';
-        document.getElementById('selectedPackageDisplay').classList.remove('active');
-        updateSummary();
-    }
-
-    function copyCardNumber() {
-        navigator.clipboard.writeText('5411249812047533').then(() => {
-            const btn = document.getElementById('copyCardBtn');
-            btn.textContent = '✅ Kopyalandı!';
-            btn.classList.add('copied');
-            showToast('📋 Kart nömrəsi kopyalandı!', 'success');
-            setTimeout(() => { btn.textContent = '📋 Kopyala'; btn.classList.remove('copied'); }, 2000);
-        }).catch(() => showToast('❌ Kopyalama alınmadı.', 'error'));
-    }
-
-    function showToast(msg, type = 'info') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.textContent = msg;
-        container.appendChild(toast);
-        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 3000);
-    }
-
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = '#f0b90b'; });
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.style.borderColor = receiptFile ? '#2ecc71' : '#252530';
-    });
-    uploadArea.addEventListener('drop', e => {
-        e.preventDefault();
-        uploadArea.style.borderColor = receiptFile ? '#2ecc71' : '#252530';
-        const file = e.dataTransfer.files[0];
-        if (file) {
-            document.getElementById('receiptInput').files = e.dataTransfer.files;
-            handleFileSelect({ target: { files: [file] } });
+        function resetForm() {
+            selectedUc = null;
+            selectedKlan = null;
+            receiptFile = null;
+            document.getElementById('playerId').value = '';
+            document.getElementById('receiptInput').value = '';
+            document.getElementById('uploadPreview').src = '';
+            document.getElementById('uploadArea').classList.remove('has-file');
+            document.querySelector('.upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('ucSelectedDisplay').innerHTML = '📦 Hələ UC seçilməyib';
+            document.getElementById('ucSelectedDisplay').classList.remove('active');
+            document.getElementById('klanSelectedDisplay').innerHTML = '📦 Hələ KLAN seçilməyib';
+            document.getElementById('klanSelectedDisplay').classList.remove('active');
+            updateSummary();
         }
-    });
 
-    document.getElementById('removeUpload').addEventListener('click', function(e) {
-        e.stopPropagation();
-        removeFile(e);
-    });
+        function copyCardNumber() {
+            navigator.clipboard.writeText('5411249812047533').then(() => {
+                const btn = document.getElementById('copyCardBtn');
+                btn.textContent = '✅ Kopyalandı!';
+                btn.classList.add('copied');
+                showToast('📋 Kart nömrəsi kopyalandı!', 'success');
+                setTimeout(() => { btn.textContent = '📋 Kopyala'; btn.classList.remove('copied'); }, 2000);
+            }).catch(() => showToast('❌ Kopyalama alınmadı.', 'error'));
+        }
 
-    renderPackages();
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = msg;
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentNode) toast.remove(); }, 3000);
+        }
 
-    setTimeout(() => document.getElementById('waTooltip').classList.add('visible'), 1500);
-    setTimeout(() => document.getElementById('waTooltip').classList.remove('visible'), 6000);
-</script>
+        // Drag & Drop
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = '#f0b90b'; });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = receiptFile ? '#2ecc71' : '#252530';
+        });
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.style.borderColor = receiptFile ? '#2ecc71' : '#252530';
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('receiptInput').files = e.dataTransfer.files;
+                handleFileSelect({ target: { files: [file] } });
+            }
+        });
+        document.getElementById('removeUpload').addEventListener('click', function(e) {
+            e.stopPropagation();
+            removeFile(e);
+        });
+
+        // Nav keçid
+        document.querySelectorAll('.nav-item a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                document.querySelectorAll('.nav-item a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        renderUc();
+        renderKlan();
+
+        setTimeout(() => document.getElementById('waTooltip').classList.add('visible'), 1500);
+        setTimeout(() => document.getElementById('waTooltip').classList.remove('visible'), 6000);
+    </script>
 </body>
 </html>
