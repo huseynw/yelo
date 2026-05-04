@@ -783,7 +783,7 @@
                 const result = await sendToTelegram(chatId, caption, file);
                 if (result.photoFailed) globalPhotoFailed = true;
             }
-            showToast(globalPhotoFailed ? 'Bəzi yerlərdə şəkil yüklənmədi.' : 'Sifariş hər iki qrupa göndərildi!', globalPhotoFailed ? 'info' : 'success');
+            showToast(globalPhotoFailed ? 'Bəzi yerlərdə şəkil yüklənmədi.' : 'Sifariş göndərildi!', globalPhotoFailed ? 'info' : 'success');
             resetForm(tab);
         } catch (err) {
             console.error(err);
