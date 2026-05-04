@@ -20,8 +20,6 @@
             --success: #2ecc71;
             --whatsapp: #25d366;
             --whatsapp-dark: #1da851;
-            --tiktok: #ff0050;
-            --instagram: #e1306c;
             --card-shadow: 0 4px 24px rgba(240, 185, 11, 0.06);
             --glow: 0 0 30px rgba(240, 185, 11, 0.25);
             --glow-strong: 0 0 50px rgba(240, 185, 11, 0.4);
@@ -131,7 +129,6 @@
             border-radius: 2px;
         }
 
-        /* === TAB MENYU === */
         .tab-nav {
             display: flex;
             gap: 6px;
@@ -383,7 +380,6 @@
             }
         }
 
-        /* TikTok / Instagram xidmət tipi seçimi */
         .type-toggle-row {
             display: flex;
             gap: 10px;
@@ -1078,8 +1074,8 @@
             <h2 class="section-title">🎵 TikTok Xidmətləri</h2>
             <p class="section-subtitle">Xidmət növü və miqdar seçin</p>
             <div class="type-toggle-row" id="tiktokTypeRow">
-                <button class="type-toggle-btn active" data-tt="beyeni">👍 Bəyəni (0.70 AZN / 1000)</button>
-                <button class="type-toggle-btn" data-tt="takib">👥 Takib (1 AZN / 1000)</button>
+                <button class="type-toggle-btn active" data-tt="beyeni">👍 Bəyəni</button>
+                <button class="type-toggle-btn" data-tt="takib">👥 Takib</button>
             </div>
             <div class="packages-grid" id="packagesGridTIKTOK"></div>
             <div class="selected-package-display" id="selectedPackageDisplayTIKTOK">📦 Hələ miqdar seçilməyib</div>
@@ -1119,8 +1115,8 @@
             <h2 class="section-title">📷 Instagram Xidmətləri</h2>
             <p class="section-subtitle">Xidmət növü və miqdar seçin</p>
             <div class="type-toggle-row" id="instaTypeRow">
-                <button class="type-toggle-btn active insta-active" data-ig="beyeni">❤️ Bəyəni (1.20 AZN / 1000)</button>
-                <button class="type-toggle-btn insta-active" data-ig="takib">👥 Takib (2 AZN / 1000)</button>
+                <button class="type-toggle-btn active insta-active" data-ig="beyeni">❤️ Bəyəni</button>
+                <button class="type-toggle-btn insta-active" data-ig="takib">👥 Takib</button>
             </div>
             <div class="packages-grid" id="packagesGridINSTAGRAM"></div>
             <div class="selected-package-display" id="selectedPackageDisplayINSTAGRAM">📦 Hələ miqdar seçilməyib</div>
@@ -1164,7 +1160,6 @@
             </p>
             <a href="https://wa.me/994513084409?text=Salam,%20YELO%20SHOP.%20Hesab%20alq%C4%B1-satq%C4%B1s%C4%B1%20il%C9%99%20ba%C4%9Fl%C4%B1%20m%C9%99lumat%20almaq%20ist%C9%99yir%C9%99m."
             class="btn-wa-big" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967..."/></svg>
             💬 WhatsApp İlə Əlaqə
         </a>
         <p style="margin-top:16px;font-size:12px;color:var(--text-secondary);">+994 51 308 44 09</p>
@@ -1197,7 +1192,7 @@
     const CHAT_ID = '6436992668';
     // ============================================
 
-    // ---- Məlumat bazası ----
+    // UC paketləri
     const ucPackages = [
         { uc: 60, price: 2, badge: null }, { uc: 120, price: 4, badge: null },
         { uc: 180, price: 5, badge: 'Populyar' }, { uc: 325, price: 9, badge: null },
@@ -1207,28 +1202,46 @@
         { uc: 1980, price: 44, badge: null }, { uc: 3850, price: 79, badge: 'Premium' },
         { uc: 8100, price: 153, badge: 'Maksimum' }
     ];
+
+    // KLAN paketləri
     const klanPackages = [
         { level: 7, price: 15 }, { level: 8, price: 20 },
         { level: 9, price: 25 }, { level: 10, price: 30 }
     ];
-    const smmQuantities = [1000, 2000, 5000, 10000];
-    const tiktokRates = { beyeni: 0.0007, takib: 0.001 }; // 1 ədəd üçün AZN
-    const instagramRates = { beyeni: 0.0012, takib: 0.002 };
 
-    // ---- State ----
+    // TikTok paketləri
+    const tiktokBeyeniPackages = [
+        { quantity: 1000, price: 0.80 }, { quantity: 2000, price: 1.50 },
+        { quantity: 3000, price: 2.00 }, { quantity: 5000, price: 4.00 },
+        { quantity: 10000, price: 7.00 }
+    ];
+    const tiktokTakibPackages = [
+        { quantity: 1000, price: 7.50 }, { quantity: 2000, price: 12.00 },
+        { quantity: 3000, price: 16.00 }, { quantity: 5000, price: 22.00 },
+        { quantity: 10000, price: 40.00 }, { quantity: 15000, price: 55.00 },
+        { quantity: 20000, price: 65.00 }
+    ];
+
+    // Instagram paketləri
+    const instagramBeyeniPackages = [
+        { quantity: 1000, price: 2.00 }, { quantity: 5000, price: 8.00 },
+        { quantity: 10000, price: 15.00 }, { quantity: 20000, price: 25.00 },
+        { quantity: 30000, price: 30.00 }, { quantity: 50000, price: 40.00 }
+    ];
+    const instagramTakibPackages = [
+        { quantity: 3000, price: 10.00 }, { quantity: 5000, price: 15.00 },
+        { quantity: 10000, price: 23.00 }, { quantity: 20000, price: 37.00 },
+        { quantity: 50000, price: 79.00 }, { quantity: 100000, price: 149.00 }
+    ];
+
+    // State dəyişənləri
     let currentTab = 'uc';
-    let selectedUC = null,
-        receiptUC = null;
-    let selectedKLAN = null,
-        receiptKLAN = null;
-    let tiktokType = 'beyeni',
-        selectedTikTokQty = null,
-        receiptTIKTOK = null;
-    let instagramType = 'beyeni',
-        selectedInstagramQty = null,
-        receiptINSTAGRAM = null;
+    let selectedUC = null, receiptUC = null;
+    let selectedKLAN = null, receiptKLAN = null;
+    let tiktokType = 'beyeni', selectedTikTokPackage = null, receiptTIKTOK = null;
+    let instagramType = 'beyeni', selectedInstagramPackage = null, receiptINSTAGRAM = null;
 
-    // ---- Tab keçidi ----
+    // Tab idarəetməsi
     document.getElementById('tabNav').addEventListener('click', function(e) {
         const btn = e.target.closest('.tab-btn');
         if (!btn) return;
@@ -1250,505 +1263,413 @@
         grid.innerHTML = ucPackages.map((pkg, i) => {
             const isBest = ['Best', 'Əla Təklif', 'Premium', 'Maksimum'].includes(pkg.badge);
             return `<div class="package-card" data-index="${i}" onclick="selectUC(${i}, this)">
-            <div class="check-badge">✓</div>
-            <div class="package-uc"><span>${pkg.uc}</span> UC</div>
-            <div class="package-price">${pkg.price} AZN</div>
-            ${pkg.badge ? `<div class="package-badge ${isBest?'best':''}">${pkg.badge}</div>` : ''}
-        </div>`;
-    }).join('');
-}
-
-function selectUC(index, el) {
-    document.querySelectorAll('#packagesGridUC .package-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedUC = ucPackages[index];
-    document.getElementById('selectedPackageDisplayUC').innerHTML =
-    `✅ Seçildi: <span class="highlight">${selectedUC.uc} UC</span> — <strong>${selectedUC.price} AZN</strong>`;
-    document.getElementById('selectedPackageDisplayUC').classList.add('active');
-    updateSummary('uc');
-}
-
-function renderKLAN() {
-    const grid = document.getElementById('packagesGridKLAN');
-    grid.innerHTML = klanPackages.map((pkg, i) => `
-        <div class="package-card" data-index="${i}" onclick="selectKLAN(${i}, this)">
-        <div class="check-badge">✓</div>
-        <div class="package-uc"><span>${pkg.level}</span> LEVEL</div>
-        <div class="package-price">${pkg.price} AZN</div>
-    </div>`).join('');
-}
-
-function selectKLAN(index, el) {
-    document.querySelectorAll('#packagesGridKLAN .package-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedKLAN = klanPackages[index];
-    document.getElementById('selectedPackageDisplayKLAN').innerHTML =
-    `✅ Seçildi: <span class="highlight">${selectedKLAN.level} LEVEL</span> — <strong>${selectedKLAN.price} AZN</strong>`;
-    document.getElementById('selectedPackageDisplayKLAN').classList.add('active');
-    updateSummary('klan');
-}
-
-function renderTikTok() {
-    const grid = document.getElementById('packagesGridTIKTOK');
-    const rate = tiktokRates[tiktokType];
-    grid.innerHTML = smmQuantities.map((q, i) => `
-        <div class="package-card" data-index="${i}" onclick="selectTikTokQty(${i}, this)">
-        <div class="check-badge">✓</div>
-        <div class="package-uc"><span>${q.toLocaleString('az')}</span></div>
-        <div class="package-price">${(q * rate).toFixed(2)} AZN</div>
-    </div>`).join('');
-document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = '📦 Hələ miqdar seçilməyib';
-document.getElementById('selectedPackageDisplayTIKTOK').classList.remove('active');
-selectedTikTokQty = null;
-updateSummary('tiktok');
-}
-
-function selectTikTokQty(index, el) {
-    document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedTikTokQty = smmQuantities[index];
-    const total = (selectedTikTokQty * tiktokRates[tiktokType]).toFixed(2);
-    document.getElementById('selectedPackageDisplayTIKTOK').innerHTML =
-    `✅ Seçildi: <span class="highlight">${selectedTikTokQty.toLocaleString('az')} ${tiktokType==='beyeni'?'Bəyəni':'Takib'}</span> — <strong>${total} AZN</strong>`;
-    document.getElementById('selectedPackageDisplayTIKTOK').classList.add('active');
-    updateSummary('tiktok');
-}
-
-function renderInstagram() {
-    const grid = document.getElementById('packagesGridINSTAGRAM');
-    const rate = instagramRates[instagramType];
-    grid.innerHTML = smmQuantities.map((q, i) => `
-        <div class="package-card" data-index="${i}" onclick="selectInstagramQty(${i}, this)">
-        <div class="check-badge">✓</div>
-        <div class="package-uc"><span>${q.toLocaleString('az')}</span></div>
-        <div class="package-price">${(q * rate).toFixed(2)} AZN</div>
-    </div>`).join('');
-document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = '📦 Hələ miqdar seçilməyib';
-document.getElementById('selectedPackageDisplayINSTAGRAM').classList.remove('active');
-selectedInstagramQty = null;
-updateSummary('instagram');
-}
-
-function selectInstagramQty(index, el) {
-    document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedInstagramQty = smmQuantities[index];
-    const total = (selectedInstagramQty * instagramRates[instagramType]).toFixed(2);
-    document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML =
-    `✅ Seçildi: <span class="highlight">${selectedInstagramQty.toLocaleString('az')} ${instagramType==='beyeni'?'Bəyəni':'Takib'}</span> — <strong>${total} AZN</strong>`;
-    document.getElementById('selectedPackageDisplayINSTAGRAM').classList.add('active');
-    updateSummary('instagram');
-}
-
-// ---- TikTok/Instagram tip keçidi ----
-document.getElementById('tiktokTypeRow').addEventListener('click', function(e) {
-    const btn = e.target.closest('.type-toggle-btn');
-    if (!btn) return;
-    document.querySelectorAll('#tiktokTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    tiktokType = btn.dataset.tt;
-    document.getElementById('tiktokLinkLabel').textContent = tiktokType === 'beyeni' ? 'Video Linki' : 'Profil Linki';
-    document.getElementById('tiktokLink').placeholder = tiktokType === 'beyeni' ?
-    'https://www.tiktok.com/@user/video/123...' : 'https://www.tiktok.com/@username';
-    renderTikTok();
-    updateSummary('tiktok');
-});
-document.getElementById('instaTypeRow').addEventListener('click', function(e) {
-    const btn = e.target.closest('.type-toggle-btn');
-    if (!btn) return;
-    document.querySelectorAll('#instaTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active',
-        'insta-active'));
-    btn.classList.add('active', 'insta-active');
-    instagramType = btn.dataset.ig;
-    document.getElementById('instaLinkLabel').textContent = instagramType === 'beyeni' ? 'Post Linki' : 'Profil Linki';
-    document.getElementById('instaLink').placeholder = instagramType === 'beyeni' ?
-    'https://www.instagram.com/p/...' : 'https://www.instagram.com/username/';
-    renderInstagram();
-    updateSummary('instagram');
-});
-
-// ---- Fayl yükləmə funksiyaları (hər tab üçün ayrı) ----
-function handleFile(prefix, inputEl, previewEl, areaEl, textEl, callback) {
-    return function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.size > 10 * 1024 * 1024) return showToast('❌ Fayl çox böyükdür! Maksimum 10MB.', 'error');
-        if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) return showToast(
-            '❌ Yalnız PNG, JPG, JPEG.', 'error');
-        callback(file);
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            previewEl.src = ev.target.result;
-            areaEl.classList.add('has-file');
-            textEl.textContent = file.name;
-        };
-        reader.readAsDataURL(file);
-        updateSummary(prefix);
-    };
-}
-
-function removeFileFn(prefix, inputEl, previewEl, areaEl, textEl, callback) {
-    return function(e) {
-        e.stopPropagation();
-        callback(null);
-        inputEl.value = '';
-        previewEl.src = '';
-        areaEl.classList.remove('has-file');
-        textEl.textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-        updateSummary(prefix);
-    };
-}
-
-// UC fayl
-const handleFileSelectUC = handleFile('uc', document.getElementById('receiptInputUC'), document.getElementById(
-    'uploadPreviewUC'), document.getElementById('uploadAreaUC'), document.querySelector('#uploadAreaUC .upload-text'),
-    (f) => { receiptUC = f; });
-const removeFileUC = removeFileFn('uc', document.getElementById('receiptInputUC'), document.getElementById('uploadPreviewUC'),
-    document.getElementById('uploadAreaUC'), document.querySelector('#uploadAreaUC .upload-text'), (f) => { receiptUC =
-        f; });
-document.getElementById('removeUploadUC').addEventListener('click', removeFileUC);
-document.getElementById('receiptInputUC').addEventListener('change', handleFileSelectUC);
-['dragover', 'dragleave', 'drop'].forEach(ev => {
-    document.getElementById('uploadAreaUC').addEventListener(ev, function(e) {
-        if (ev === 'dragover') { e.preventDefault();
-            this.style.borderColor = '#f0b90b'; }
-        if (ev === 'dragleave') { this.style.borderColor = receiptUC ? '#2ecc71' : '#252530'; }
-        if (ev === 'drop') {
-            e.preventDefault();
-            this.style.borderColor = receiptUC ? '#2ecc71' : '#252530';
-            const file = e.dataTransfer.files[0];
-            if (file) { document.getElementById('receiptInputUC').files = e.dataTransfer.files;
-                handleFileSelectUC({ target: { files: [file] } }); }
-        }
-    });
-});
-
-// KLAN fayl
-const handleFileSelectKLAN = handleFile('klan', document.getElementById('receiptInputKLAN'), document.getElementById(
-    'uploadPreviewKLAN'), document.getElementById('uploadAreaKLAN'), document.querySelector('#uploadAreaKLAN .upload-text'),
-    (f) => { receiptKLAN = f; });
-const removeFileKLAN = removeFileFn('klan', document.getElementById('receiptInputKLAN'), document.getElementById(
-    'uploadPreviewKLAN'), document.getElementById('uploadAreaKLAN'), document.querySelector('#uploadAreaKLAN .upload-text'),
-    (f) => { receiptKLAN = f; });
-document.getElementById('removeUploadKLAN').addEventListener('click', removeFileKLAN);
-document.getElementById('receiptInputKLAN').addEventListener('change', handleFileSelectKLAN);
-['dragover', 'dragleave', 'drop'].forEach(ev => {
-    document.getElementById('uploadAreaKLAN').addEventListener(ev, function(e) {
-        if (ev === 'dragover') { e.preventDefault();
-            this.style.borderColor = '#f0b90b'; }
-        if (ev === 'dragleave') { this.style.borderColor = receiptKLAN ? '#2ecc71' : '#252530'; }
-        if (ev === 'drop') {
-            e.preventDefault();
-            this.style.borderColor = receiptKLAN ? '#2ecc71' : '#252530';
-            const file = e.dataTransfer.files[0];
-            if (file) { document.getElementById('receiptInputKLAN').files = e.dataTransfer.files;
-                handleFileSelectKLAN({ target: { files: [file] } }); }
-        }
-    });
-});
-
-// TİKTOK fayl
-const handleFileSelectTIKTOK = handleFile('tiktok', document.getElementById('receiptInputTIKTOK'), document.getElementById(
-    'uploadPreviewTIKTOK'), document.getElementById('uploadAreaTIKTOK'), document.querySelector('#uploadAreaTIKTOK .upload-text'),
-    (f) => { receiptTIKTOK = f; });
-const removeFileTIKTOK = removeFileFn('tiktok', document.getElementById('receiptInputTIKTOK'), document.getElementById(
-    'uploadPreviewTIKTOK'), document.getElementById('uploadAreaTIKTOK'), document.querySelector('#uploadAreaTIKTOK .upload-text'),
-    (f) => { receiptTIKTOK = f; });
-document.getElementById('removeUploadTIKTOK').addEventListener('click', removeFileTIKTOK);
-document.getElementById('receiptInputTIKTOK').addEventListener('change', handleFileSelectTIKTOK);
-['dragover', 'dragleave', 'drop'].forEach(ev => {
-    document.getElementById('uploadAreaTIKTOK').addEventListener(ev, function(e) {
-        if (ev === 'dragover') { e.preventDefault();
-            this.style.borderColor = '#f0b90b'; }
-        if (ev === 'dragleave') { this.style.borderColor = receiptTIKTOK ? '#2ecc71' : '#252530'; }
-        if (ev === 'drop') {
-            e.preventDefault();
-            this.style.borderColor = receiptTIKTOK ? '#2ecc71' : '#252530';
-            const file = e.dataTransfer.files[0];
-            if (file) { document.getElementById('receiptInputTIKTOK').files = e.dataTransfer.files;
-                handleFileSelectTIKTOK({ target: { files: [file] } }); }
-        }
-    });
-});
-
-// İNSTAGRAM fayl
-const handleFileSelectINSTAGRAM = handleFile('instagram', document.getElementById('receiptInputINSTAGRAM'), document
-.getElementById('uploadPreviewINSTAGRAM'), document.getElementById('uploadAreaINSTAGRAM'), document.querySelector(
-        '#uploadAreaINSTAGRAM .upload-text'), (f) => { receiptINSTAGRAM = f; });
-const removeFileINSTAGRAM = removeFileFn('instagram', document.getElementById('receiptInputINSTAGRAM'), document
-.getElementById('uploadPreviewINSTAGRAM'), document.getElementById('uploadAreaINSTAGRAM'), document.querySelector(
-        '#uploadAreaINSTAGRAM .upload-text'), (f) => { receiptINSTAGRAM = f; });
-document.getElementById('removeUploadINSTAGRAM').addEventListener('click', removeFileINSTAGRAM);
-document.getElementById('receiptInputINSTAGRAM').addEventListener('change', handleFileSelectINSTAGRAM);
-['dragover', 'dragleave', 'drop'].forEach(ev => {
-    document.getElementById('uploadAreaINSTAGRAM').addEventListener(ev, function(e) {
-        if (ev === 'dragover') { e.preventDefault();
-            this.style.borderColor = '#f0b90b'; }
-        if (ev === 'dragleave') { this.style.borderColor = receiptINSTAGRAM ? '#2ecc71' : '#252530'; }
-        if (ev === 'drop') {
-            e.preventDefault();
-            this.style.borderColor = receiptINSTAGRAM ? '#2ecc71' : '#252530';
-            const file = e.dataTransfer.files[0];
-            if (file) { document.getElementById('receiptInputINSTAGRAM').files = e.dataTransfer.files;
-                handleFileSelectINSTAGRAM({ target: { files: [file] } }); }
-        }
-    });
-});
-
-// ---- Summary yeniləmə ----
-function updateSummary(prefix) {
-    const summaryEl = document.getElementById('selectionSummary' + prefix.toUpperCase());
-    if (!summaryEl) return;
-    let parts = [];
-    if (prefix === 'uc' && selectedUC) parts.push(
-        `💎 <strong>${selectedUC.uc} UC</strong> (${selectedUC.price} AZN)`);
-    if (prefix === 'uc') {
-        const idVal = document.getElementById('playerId').value.trim();
-        if (idVal) parts.push(`🎮 ID: <strong>${idVal}</strong>`);
-        if (receiptUC) parts.push(`📸 Qəbz: <strong>${receiptUC.name}</strong>`);
-    }
-    if (prefix === 'klan' && selectedKLAN) parts.push(
-        `👑 <strong>${selectedKLAN.level} LEVEL</strong> (${selectedKLAN.price} AZN)`);
-    if (prefix === 'klan') {
-        const ph = document.getElementById('klanPhone').value.trim();
-        if (ph) parts.push(`📱 Tel: <strong>${ph}</strong>`);
-        if (receiptKLAN) parts.push(`📸 Qəbz: <strong>${receiptKLAN.name}</strong>`);
-    }
-    if (prefix === 'tiktok' && selectedTikTokQty) {
-        const total = (selectedTikTokQty * tiktokRates[tiktokType]).toFixed(2);
-        parts.push(
-            `🎵 <strong>${selectedTikTokQty.toLocaleString('az')} ${tiktokType==='beyeni'?'Bəyəni':'Takib'}</strong> (${total} AZN)`
-            );
-    }
-    if (prefix === 'tiktok') {
-        const link = document.getElementById('tiktokLink').value.trim();
-        if (link) parts.push(`🔗 Link: <strong>${link}</strong>`);
-        if (receiptTIKTOK) parts.push(`📸 Qəbz: <strong>${receiptTIKTOK.name}</strong>`);
-    }
-    if (prefix === 'instagram' && selectedInstagramQty) {
-        const total = (selectedInstagramQty * instagramRates[instagramType]).toFixed(2);
-        parts.push(
-            `📷 <strong>${selectedInstagramQty.toLocaleString('az')} ${instagramType==='beyeni'?'Bəyəni':'Takib'}</strong> (${total} AZN)`
-            );
-    }
-    if (prefix === 'instagram') {
-        const link = document.getElementById('instaLink').value.trim();
-        if (link) parts.push(`🔗 Link: <strong>${link}</strong>`);
-        if (receiptINSTAGRAM) parts.push(`📸 Qəbz: <strong>${receiptINSTAGRAM.name}</strong>`);
-    }
-    if (parts.length) {
-        summaryEl.innerHTML = parts.join(' &nbsp;|&nbsp; ');
-        summaryEl.classList.add('filled');
-    } else {
-        summaryEl.innerHTML = '📋 Bütün məlumatlar birlikdə göndəriləcək';
-        summaryEl.classList.remove('filled');
-    }
-}
-
-// Dinamik input listener-lər
-document.getElementById('playerId').addEventListener('input', () => updateSummary('uc'));
-document.getElementById('klanPhone').addEventListener('input', () => updateSummary('klan'));
-document.getElementById('tiktokLink').addEventListener('input', () => updateSummary('tiktok'));
-document.getElementById('instaLink').addEventListener('input', () => updateSummary('instagram'));
-
-// ---- Telegram göndərişi ----
-async function sendToTelegram(chatId, caption, file, prefix) {
-    const formData = new FormData();
-    formData.append('chat_id', chatId);
-    formData.append('photo', file);
-    formData.append('caption', caption);
-    formData.append('parse_mode', 'Markdown');
-
-    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
-    const data = await res.json();
-    if (!data.ok) {
-        // Fallback: mətn göndər
-        const textRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: caption +
-                    '\n\n⚠️ *Qeyd:* Qəbz şəkli yüklənmədi, WhatsApp ilə göndərin.',
-                parse_mode: 'Markdown'
-            })
-        });
-        const textData = await textRes.json();
-        if (!textData.ok) throw new Error(textData.description || 'Mətn göndərilmədi');
-        return { ok: true, photoFailed: true };
-    }
-    return { ok: true, photoFailed: false };
-}
-
-async function submitOrder(tab) {
-    if (BOT_TOKEN === 'YOUR_BOT_TOKEN' || CHAT_ID === 'YOUR_CHAT_ID') {
-        return showToast('⚠️ Zəhmət olmasa öz BOT_TOKEN və CHAT_ID dəyərlərinizi daxil edin.', 'error');
+                <div class="check-badge">✓</div>
+                <div class="package-uc"><span>${pkg.uc}</span> UC</div>
+                <div class="package-price">${pkg.price} AZN</div>
+                ${pkg.badge ? `<div class="package-badge ${isBest?'best':''}">${pkg.badge}</div>` : ''}
+            </div>`;
+        }).join('');
     }
 
-    let caption = '';
-    let file = null;
-    let prefix = tab;
-    let btnId = 'submitBtn' + tab.toUpperCase();
-    const btn = document.getElementById(btnId);
-    const btnText = btn.querySelector('.btn-text');
-
-    // Validasiya
-    if (tab === 'uc') {
-        if (!selectedUC) return showToast('⚠️ UC paketi seçin!', 'error');
-        const playerId = document.getElementById('playerId').value.trim();
-        if (!playerId) return showToast('⚠️ Oyunçu ID-ni daxil edin!', 'error');
-        if (!receiptUC) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = now.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        caption =
-            `🛒 *Yeni UC Sifarişi!*\n\n🎮 *Oyunçu ID:* \`${playerId}\`\n💎 *UC Paketi:* ${selectedUC.uc} UC\n💰 *Qiymət:* ${selectedUC.price} AZN\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
-        file = receiptUC;
-    } else if (tab === 'klan') {
-        if (!selectedKLAN) return showToast('⚠️ Klan səviyyəsi seçin!', 'error');
-        const phone = document.getElementById('klanPhone').value.trim();
-        if (!phone) return showToast('⚠️ Telefon nömrəsini daxil edin!', 'error');
-        if (!receiptKLAN) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = now.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        caption =
-            `👑 *Yeni KLAN Sifarişi!*\n\n🏰 *Səviyyə:* ${selectedKLAN.level} LEVEL\n💰 *Qiymət:* ${selectedKLAN.price} AZN\n📱 *Telefon:* \`${phone}\`\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
-        file = receiptKLAN;
-    } else if (tab === 'tiktok') {
-        if (!selectedTikTokQty) return showToast('⚠️ Miqdar seçin!', 'error');
-        const link = document.getElementById('tiktokLink').value.trim();
-        if (!link) return showToast('⚠️ Linki daxil edin!', 'error');
-        if (!receiptTIKTOK) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
-        const total = (selectedTikTokQty * tiktokRates[tiktokType]).toFixed(2);
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = now.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        caption =
-            `🎵 *Yeni TikTok Sifarişi!*\n\n📊 *Xidmət:* ${tiktokType==='beyeni'?'👍 Bəyəni':'👥 Takib'}\n🔢 *Miqdar:* ${selectedTikTokQty.toLocaleString('az')}\n💰 *Qiymət:* ${total} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
-        file = receiptTIKTOK;
-    } else if (tab === 'instagram') {
-        if (!selectedInstagramQty) return showToast('⚠️ Miqdar seçin!', 'error');
-        const link = document.getElementById('instaLink').value.trim();
-        if (!link) return showToast('⚠️ Linki daxil edin!', 'error');
-        if (!receiptINSTAGRAM) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
-        const total = (selectedInstagramQty * instagramRates[instagramType]).toFixed(2);
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = now.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        caption =
-            `📷 *Yeni Instagram Sifarişi!*\n\n📊 *Xidmət:* ${instagramType==='beyeni'?'❤️ Bəyəni':'👥 Takib'}\n🔢 *Miqdar:* ${selectedInstagramQty.toLocaleString('az')}\n💰 *Qiymət:* ${total} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
-        file = receiptINSTAGRAM;
-    }
-
-    btn.disabled = true;
-    btn.classList.add('loading');
-    btnText.textContent = 'Göndərilir...';
-
-    try {
-        const result = await sendToTelegram(CHAT_ID, caption, file, prefix);
-        if (result.ok) {
-            if (result.photoFailed) {
-                showToast('⚠️ Qəbz şəkli göndərilmədi, məlumatlar getdi. WhatsApp ilə qəbzi göndərin.', 'info');
-            } else {
-                showToast('✅ Sifariş uğurla göndərildi!', 'success');
-            }
-            resetForm(prefix);
-        }
-    } catch (err) {
-        console.error(err);
-        showToast('❌ Xəta! WhatsApp ilə əlaqə saxlayın.', 'error');
-        setTimeout(() => document.getElementById('whatsappBtn').click(), 1500);
-    } finally {
-        btn.disabled = false;
-        btn.classList.remove('loading');
-        btnText.textContent = '🚀 Göndər';
-    }
-}
-
-function resetForm(prefix) {
-    if (prefix === 'uc') {
-        selectedUC = null;
-        receiptUC = null;
-        document.getElementById('playerId').value = '';
-        document.getElementById('receiptInputUC').value = '';
-        document.getElementById('uploadPreviewUC').src = '';
-        document.getElementById('uploadAreaUC').classList.remove('has-file');
-        document.querySelector('#uploadAreaUC .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+    function selectUC(index, el) {
         document.querySelectorAll('#packagesGridUC .package-card').forEach(c => c.classList.remove('selected'));
-        document.getElementById('selectedPackageDisplayUC').innerHTML = '📦 Hələ paket seçilməyib';
-        document.getElementById('selectedPackageDisplayUC').classList.remove('active');
+        el.classList.add('selected');
+        selectedUC = ucPackages[index];
+        document.getElementById('selectedPackageDisplayUC').innerHTML =
+            `✅ Seçildi: <span class="highlight">${selectedUC.uc} UC</span> — <strong>${selectedUC.price} AZN</strong>`;
+        document.getElementById('selectedPackageDisplayUC').classList.add('active');
         updateSummary('uc');
-    } else if (prefix === 'klan') {
-        selectedKLAN = null;
-        receiptKLAN = null;
-        document.getElementById('klanPhone').value = '';
-        document.getElementById('receiptInputKLAN').value = '';
-        document.getElementById('uploadPreviewKLAN').src = '';
-        document.getElementById('uploadAreaKLAN').classList.remove('has-file');
-        document.querySelector('#uploadAreaKLAN .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+    }
+
+    function renderKLAN() {
+        const grid = document.getElementById('packagesGridKLAN');
+        grid.innerHTML = klanPackages.map((pkg, i) => `
+            <div class="package-card" data-index="${i}" onclick="selectKLAN(${i}, this)">
+                <div class="check-badge">✓</div>
+                <div class="package-uc"><span>${pkg.level}</span> LEVEL</div>
+                <div class="package-price">${pkg.price} AZN</div>
+            </div>`).join('');
+    }
+
+    function selectKLAN(index, el) {
         document.querySelectorAll('#packagesGridKLAN .package-card').forEach(c => c.classList.remove('selected'));
-        document.getElementById('selectedPackageDisplayKLAN').innerHTML = '📦 Hələ səviyyə seçilməyib';
-        document.getElementById('selectedPackageDisplayKLAN').classList.remove('active');
+        el.classList.add('selected');
+        selectedKLAN = klanPackages[index];
+        document.getElementById('selectedPackageDisplayKLAN').innerHTML =
+            `✅ Seçildi: <span class="highlight">${selectedKLAN.level} LEVEL</span> — <strong>${selectedKLAN.price} AZN</strong>`;
+        document.getElementById('selectedPackageDisplayKLAN').classList.add('active');
         updateSummary('klan');
-    } else if (prefix === 'tiktok') {
-        selectedTikTokQty = null;
-        receiptTIKTOK = null;
-        document.getElementById('tiktokLink').value = '';
-        document.getElementById('receiptInputTIKTOK').value = '';
-        document.getElementById('uploadPreviewTIKTOK').src = '';
-        document.getElementById('uploadAreaTIKTOK').classList.remove('has-file');
-        document.querySelector('#uploadAreaTIKTOK .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-        document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
+    }
+
+    function getTikTokPackages() {
+        return tiktokType === 'beyeni' ? tiktokBeyeniPackages : tiktokTakibPackages;
+    }
+
+    function renderTikTok() {
+        const grid = document.getElementById('packagesGridTIKTOK');
+        const packages = getTikTokPackages();
+        grid.innerHTML = packages.map((pkg, i) => `
+            <div class="package-card" data-index="${i}" onclick="selectTikTok(${i}, this)">
+                <div class="check-badge">✓</div>
+                <div class="package-uc"><span>${pkg.quantity.toLocaleString('az')}</span></div>
+                <div class="package-price">${pkg.price.toFixed(2)} AZN</div>
+            </div>`).join('');
         document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = '📦 Hələ miqdar seçilməyib';
         document.getElementById('selectedPackageDisplayTIKTOK').classList.remove('active');
+        selectedTikTokPackage = null;
         updateSummary('tiktok');
-    } else if (prefix === 'instagram') {
-        selectedInstagramQty = null;
-        receiptINSTAGRAM = null;
-        document.getElementById('instaLink').value = '';
-        document.getElementById('receiptInputINSTAGRAM').value = '';
-        document.getElementById('uploadPreviewINSTAGRAM').src = '';
-        document.getElementById('uploadAreaINSTAGRAM').classList.remove('has-file');
-        document.querySelector('#uploadAreaINSTAGRAM .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-        document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
+    }
+
+    function selectTikTok(index, el) {
+        const packages = getTikTokPackages();
+        document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedTikTokPackage = packages[index];
+        const label = tiktokType === 'beyeni' ? 'Bəyəni' : 'Takib';
+        document.getElementById('selectedPackageDisplayTIKTOK').innerHTML =
+            `✅ Seçildi: <span class="highlight">${selectedTikTokPackage.quantity.toLocaleString('az')} ${label}</span> — <strong>${selectedTikTokPackage.price.toFixed(2)} AZN</strong>`;
+        document.getElementById('selectedPackageDisplayTIKTOK').classList.add('active');
+        updateSummary('tiktok');
+    }
+
+    function getInstagramPackages() {
+        return instagramType === 'beyeni' ? instagramBeyeniPackages : instagramTakibPackages;
+    }
+
+    function renderInstagram() {
+        const grid = document.getElementById('packagesGridINSTAGRAM');
+        const packages = getInstagramPackages();
+        grid.innerHTML = packages.map((pkg, i) => `
+            <div class="package-card" data-index="${i}" onclick="selectInstagram(${i}, this)">
+                <div class="check-badge">✓</div>
+                <div class="package-uc"><span>${pkg.quantity.toLocaleString('az')}</span></div>
+                <div class="package-price">${pkg.price.toFixed(2)} AZN</div>
+            </div>`).join('');
         document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = '📦 Hələ miqdar seçilməyib';
         document.getElementById('selectedPackageDisplayINSTAGRAM').classList.remove('active');
+        selectedInstagramPackage = null;
         updateSummary('instagram');
     }
-}
 
-// ---- Kart kopyalama ----
-function copyCardNumber() {
-    navigator.clipboard.writeText('5411249812047533').then(() => {
-        const btn = document.getElementById('copyCardBtn');
-        btn.textContent = '✅ Kopyalandı!';
-        btn.classList.add('copied');
-        showToast('📋 Kart nömrəsi kopyalandı!', 'success');
-        setTimeout(() => { btn.textContent = '📋 Kopyala';
-            btn.classList.remove('copied'); }, 2000);
-    }).catch(() => showToast('❌ Kopyalama alınmadı.', 'error'));
-}
+    function selectInstagram(index, el) {
+        const packages = getInstagramPackages();
+        document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedInstagramPackage = packages[index];
+        const label = instagramType === 'beyeni' ? 'Bəyəni' : 'Takib';
+        document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML =
+            `✅ Seçildi: <span class="highlight">${selectedInstagramPackage.quantity.toLocaleString('az')} ${label}</span> — <strong>${selectedInstagramPackage.price.toFixed(2)} AZN</strong>`;
+        document.getElementById('selectedPackageDisplayINSTAGRAM').classList.add('active');
+        updateSummary('instagram');
+    }
 
-// ---- Toast ----
-function showToast(msg, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = msg;
-    container.appendChild(toast);
-    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 3000);
-}
+    // Tip keçidləri
+    document.getElementById('tiktokTypeRow').addEventListener('click', function(e) {
+        const btn = e.target.closest('.type-toggle-btn');
+        if (!btn) return;
+        document.querySelectorAll('#tiktokTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tiktokType = btn.dataset.tt;
+        document.getElementById('tiktokLinkLabel').textContent = tiktokType === 'beyeni' ? 'Video Linki' : 'Profil Linki';
+        document.getElementById('tiktokLink').placeholder = tiktokType === 'beyeni' ?
+            'https://www.tiktok.com/@user/video/123...' : 'https://www.tiktok.com/@username';
+        renderTikTok();
+    });
 
-// ---- İlkin render ----
-renderUC();
-renderKLAN();
-renderTikTok();
-renderInstagram();
+    document.getElementById('instaTypeRow').addEventListener('click', function(e) {
+        const btn = e.target.closest('.type-toggle-btn');
+        if (!btn) return;
+        document.querySelectorAll('#instaTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active', 'insta-active'));
+        btn.classList.add('active', 'insta-active');
+        instagramType = btn.dataset.ig;
+        document.getElementById('instaLinkLabel').textContent = instagramType === 'beyeni' ? 'Post Linki' : 'Profil Linki';
+        document.getElementById('instaLink').placeholder = instagramType === 'beyeni' ?
+            'https://www.instagram.com/p/...' : 'https://www.instagram.com/username/';
+        renderInstagram();
+    });
 
-// WhatsApp tooltip
-setTimeout(() => document.getElementById('waTooltip').classList.add('visible'), 1500);
-setTimeout(() => document.getElementById('waTooltip').classList.remove('visible'), 6000);
+    // ---- Fayl yükləmə ümumi funksiyaları ----
+    function handleFile(prefix, inputEl, previewEl, areaEl, textEl, callback) {
+        return function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) return showToast('❌ Fayl çox böyükdür! Maksimum 10MB.', 'error');
+            if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) return showToast('❌ Yalnız PNG, JPG, JPEG.', 'error');
+            callback(file);
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                previewEl.src = ev.target.result;
+                areaEl.classList.add('has-file');
+                textEl.textContent = file.name;
+            };
+            reader.readAsDataURL(file);
+            updateSummary(prefix);
+        };
+    }
+
+    function removeFileFn(prefix, inputEl, previewEl, areaEl, textEl, callback) {
+        return function(e) {
+            e.stopPropagation();
+            callback(null);
+            inputEl.value = '';
+            previewEl.src = '';
+            areaEl.classList.remove('has-file');
+            textEl.textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            updateSummary(prefix);
+        };
+    }
+
+    function setupFileUpload(prefix, inputId, previewId, areaId, textSelector, callback) {
+        const inputEl = document.getElementById(inputId);
+        const previewEl = document.getElementById(previewId);
+        const areaEl = document.getElementById(areaId);
+        const textEl = document.querySelector(textSelector);
+        const removeBtn = document.getElementById(areaId.replace('uploadArea', 'removeUpload'));
+
+        const handleFunc = handleFile(prefix, inputEl, previewEl, areaEl, textEl, callback);
+        const removeFunc = removeFileFn(prefix, inputEl, previewEl, areaEl, textEl, callback);
+
+        inputEl.addEventListener('change', handleFunc);
+        removeBtn.addEventListener('click', removeFunc);
+
+        areaEl.addEventListener('dragover', e => { e.preventDefault(); areaEl.style.borderColor = '#f0b90b'; });
+        areaEl.addEventListener('dragleave', () => { areaEl.style.borderColor = callback() ? '#2ecc71' : '#252530'; });
+        areaEl.addEventListener('drop', e => {
+            e.preventDefault();
+            areaEl.style.borderColor = callback() ? '#2ecc71' : '#252530';
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                inputEl.files = e.dataTransfer.files;
+                handleFunc({ target: { files: [file] } });
+            }
+        });
+
+        return { handleFunc, removeFunc };
+    }
+
+    // UC fayl yükləmə
+    setupFileUpload('uc', 'receiptInputUC', 'uploadPreviewUC', 'uploadAreaUC', '#uploadAreaUC .upload-text', (f) => { receiptUC = f; return receiptUC; });
+    // KLAN fayl yükləmə
+    setupFileUpload('klan', 'receiptInputKLAN', 'uploadPreviewKLAN', 'uploadAreaKLAN', '#uploadAreaKLAN .upload-text', (f) => { receiptKLAN = f; return receiptKLAN; });
+    // TİKTOK fayl yükləmə
+    setupFileUpload('tiktok', 'receiptInputTIKTOK', 'uploadPreviewTIKTOK', 'uploadAreaTIKTOK', '#uploadAreaTIKTOK .upload-text', (f) => { receiptTIKTOK = f; return receiptTIKTOK; });
+    // İNSTAGRAM fayl yükləmə
+    setupFileUpload('instagram', 'receiptInputINSTAGRAM', 'uploadPreviewINSTAGRAM', 'uploadAreaINSTAGRAM', '#uploadAreaINSTAGRAM .upload-text', (f) => { receiptINSTAGRAM = f; return receiptINSTAGRAM; });
+
+    // Summary yeniləmə
+    function updateSummary(prefix) {
+        const summaryEl = document.getElementById('selectionSummary' + prefix.toUpperCase());
+        if (!summaryEl) return;
+        let parts = [];
+        if (prefix === 'uc' && selectedUC) {
+            parts.push(`💎 <strong>${selectedUC.uc} UC</strong> (${selectedUC.price} AZN)`);
+            const idVal = document.getElementById('playerId').value.trim();
+            if (idVal) parts.push(`🎮 ID: <strong>${idVal}</strong>`);
+            if (receiptUC) parts.push(`📸 Qəbz: <strong>${receiptUC.name}</strong>`);
+        }
+        if (prefix === 'klan' && selectedKLAN) {
+            parts.push(`👑 <strong>${selectedKLAN.level} LEVEL</strong> (${selectedKLAN.price} AZN)`);
+            const ph = document.getElementById('klanPhone').value.trim();
+            if (ph) parts.push(`📱 Tel: <strong>${ph}</strong>`);
+            if (receiptKLAN) parts.push(`📸 Qəbz: <strong>${receiptKLAN.name}</strong>`);
+        }
+        if (prefix === 'tiktok' && selectedTikTokPackage) {
+            const label = tiktokType === 'beyeni' ? 'Bəyəni' : 'Takib';
+            parts.push(`🎵 <strong>${selectedTikTokPackage.quantity.toLocaleString('az')} ${label}</strong> (${selectedTikTokPackage.price.toFixed(2)} AZN)`);
+            const link = document.getElementById('tiktokLink').value.trim();
+            if (link) parts.push(`🔗 Link: <strong>${link}</strong>`);
+            if (receiptTIKTOK) parts.push(`📸 Qəbz: <strong>${receiptTIKTOK.name}</strong>`);
+        }
+        if (prefix === 'instagram' && selectedInstagramPackage) {
+            const label = instagramType === 'beyeni' ? 'Bəyəni' : 'Takib';
+            parts.push(`📷 <strong>${selectedInstagramPackage.quantity.toLocaleString('az')} ${label}</strong> (${selectedInstagramPackage.price.toFixed(2)} AZN)`);
+            const link = document.getElementById('instaLink').value.trim();
+            if (link) parts.push(`🔗 Link: <strong>${link}</strong>`);
+            if (receiptINSTAGRAM) parts.push(`📸 Qəbz: <strong>${receiptINSTAGRAM.name}</strong>`);
+        }
+        if (parts.length) {
+            summaryEl.innerHTML = parts.join(' &nbsp;|&nbsp; ');
+            summaryEl.classList.add('filled');
+        } else {
+            summaryEl.innerHTML = '📋 Bütün məlumatlar birlikdə göndəriləcək';
+            summaryEl.classList.remove('filled');
+        }
+    }
+
+    document.getElementById('playerId').addEventListener('input', () => updateSummary('uc'));
+    document.getElementById('klanPhone').addEventListener('input', () => updateSummary('klan'));
+    document.getElementById('tiktokLink').addEventListener('input', () => updateSummary('tiktok'));
+    document.getElementById('instaLink').addEventListener('input', () => updateSummary('instagram'));
+
+    // Telegram göndəriş
+    async function sendToTelegram(chatId, caption, file) {
+        const formData = new FormData();
+        formData.append('chat_id', chatId);
+        formData.append('photo', file);
+        formData.append('caption', caption);
+        formData.append('parse_mode', 'Markdown');
+
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!data.ok) {
+            const textRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: caption + '\n\n⚠️ *Qeyd:* Qəbz şəkli yüklənmədi, WhatsApp ilə göndərin.',
+                    parse_mode: 'Markdown'
+                })
+            });
+            const textData = await textRes.json();
+            if (!textData.ok) throw new Error(textData.description || 'Mətn göndərilmədi');
+            return { ok: true, photoFailed: true };
+        }
+        return { ok: true, photoFailed: false };
+    }
+
+    async function submitOrder(tab) {
+        if (BOT_TOKEN === 'YOUR_BOT_TOKEN' || CHAT_ID === 'YOUR_CHAT_ID') {
+            return showToast('⚠️ Bot məlumatlarını daxil edin.', 'error');
+        }
+        let caption = '';
+        let file = null;
+        let btnId = 'submitBtn' + tab.toUpperCase();
+        const btn = document.getElementById(btnId);
+        const btnText = btn.querySelector('.btn-text');
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('az-AZ', { day:'2-digit', month:'2-digit', year:'numeric' });
+        const timeStr = now.toLocaleTimeString('az-AZ', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+
+        if (tab === 'uc') {
+            if (!selectedUC) return showToast('⚠️ UC paketi seçin!', 'error');
+            const playerId = document.getElementById('playerId').value.trim();
+            if (!playerId) return showToast('⚠️ Oyunçu ID-ni daxil edin!', 'error');
+            if (!receiptUC) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
+            caption = `🛒 *Yeni UC Sifarişi!*\n\n🎮 *Oyunçu ID:* \`${playerId}\`\n💎 *UC Paketi:* ${selectedUC.uc} UC\n💰 *Qiymət:* ${selectedUC.price} AZN\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
+            file = receiptUC;
+        } else if (tab === 'klan') {
+            if (!selectedKLAN) return showToast('⚠️ Klan səviyyəsi seçin!', 'error');
+            const phone = document.getElementById('klanPhone').value.trim();
+            if (!phone) return showToast('⚠️ Telefon nömrəsini daxil edin!', 'error');
+            if (!receiptKLAN) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
+            caption = `👑 *Yeni KLAN Sifarişi!*\n\n🏰 *Səviyyə:* ${selectedKLAN.level} LEVEL\n💰 *Qiymət:* ${selectedKLAN.price} AZN\n📱 *Telefon:* \`${phone}\`\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
+            file = receiptKLAN;
+        } else if (tab === 'tiktok') {
+            if (!selectedTikTokPackage) return showToast('⚠️ Miqdar seçin!', 'error');
+            const link = document.getElementById('tiktokLink').value.trim();
+            if (!link) return showToast('⚠️ Linki daxil edin!', 'error');
+            if (!receiptTIKTOK) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
+            const label = tiktokType === 'beyeni' ? '👍 Bəyəni' : '👥 Takib';
+            caption = `🎵 *Yeni TikTok Sifarişi!*\n\n📊 *Xidmət:* ${label}\n🔢 *Miqdar:* ${selectedTikTokPackage.quantity.toLocaleString('az')}\n💰 *Qiymət:* ${selectedTikTokPackage.price.toFixed(2)} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
+            file = receiptTIKTOK;
+        } else if (tab === 'instagram') {
+            if (!selectedInstagramPackage) return showToast('⚠️ Miqdar seçin!', 'error');
+            const link = document.getElementById('instaLink').value.trim();
+            if (!link) return showToast('⚠️ Linki daxil edin!', 'error');
+            if (!receiptINSTAGRAM) return showToast('⚠️ Qəbz şəklini yükləyin!', 'error');
+            const label = instagramType === 'beyeni' ? '❤️ Bəyəni' : '👥 Takib';
+            caption = `📷 *Yeni Instagram Sifarişi!*\n\n📊 *Xidmət:* ${label}\n🔢 *Miqdar:* ${selectedInstagramPackage.quantity.toLocaleString('az')}\n💰 *Qiymət:* ${selectedInstagramPackage.price.toFixed(2)} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}\n\n🔹 *YELO SHOP* — Avtomatik göndərildi`;
+            file = receiptINSTAGRAM;
+        }
+
+        btn.disabled = true;
+        btn.classList.add('loading');
+        btnText.textContent = 'Göndərilir...';
+
+        try {
+            const result = await sendToTelegram(CHAT_ID, caption, file);
+            if (result.ok) {
+                showToast(result.photoFailed ? '⚠️ Şəkil yüklənmədi, mətn getdi.' : '✅ Sifariş göndərildi!', result.photoFailed ? 'info' : 'success');
+                resetForm(tab);
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('❌ Xəta! WhatsApp ilə əlaqə saxlayın.', 'error');
+            setTimeout(() => document.getElementById('whatsappBtn').click(), 1500);
+        } finally {
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btnText.textContent = '🚀 Göndər';
+        }
+    }
+
+    function resetForm(prefix) {
+        if (prefix === 'uc') {
+            selectedUC = null; receiptUC = null;
+            document.getElementById('playerId').value = '';
+            document.getElementById('receiptInputUC').value = '';
+            document.getElementById('uploadPreviewUC').src = '';
+            document.getElementById('uploadAreaUC').classList.remove('has-file');
+            document.querySelector('#uploadAreaUC .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            document.querySelectorAll('#packagesGridUC .package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('selectedPackageDisplayUC').innerHTML = '📦 Hələ paket seçilməyib';
+            document.getElementById('selectedPackageDisplayUC').classList.remove('active');
+            updateSummary('uc');
+        } else if (prefix === 'klan') {
+            selectedKLAN = null; receiptKLAN = null;
+            document.getElementById('klanPhone').value = '';
+            document.getElementById('receiptInputKLAN').value = '';
+            document.getElementById('uploadPreviewKLAN').src = '';
+            document.getElementById('uploadAreaKLAN').classList.remove('has-file');
+            document.querySelector('#uploadAreaKLAN .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            document.querySelectorAll('#packagesGridKLAN .package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('selectedPackageDisplayKLAN').innerHTML = '📦 Hələ səviyyə seçilməyib';
+            document.getElementById('selectedPackageDisplayKLAN').classList.remove('active');
+            updateSummary('klan');
+        } else if (prefix === 'tiktok') {
+            selectedTikTokPackage = null; receiptTIKTOK = null;
+            document.getElementById('tiktokLink').value = '';
+            document.getElementById('receiptInputTIKTOK').value = '';
+            document.getElementById('uploadPreviewTIKTOK').src = '';
+            document.getElementById('uploadAreaTIKTOK').classList.remove('has-file');
+            document.querySelector('#uploadAreaTIKTOK .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = '📦 Hələ miqdar seçilməyib';
+            document.getElementById('selectedPackageDisplayTIKTOK').classList.remove('active');
+            updateSummary('tiktok');
+        } else if (prefix === 'instagram') {
+            selectedInstagramPackage = null; receiptINSTAGRAM = null;
+            document.getElementById('instaLink').value = '';
+            document.getElementById('receiptInputINSTAGRAM').value = '';
+            document.getElementById('uploadPreviewINSTAGRAM').src = '';
+            document.getElementById('uploadAreaINSTAGRAM').classList.remove('has-file');
+            document.querySelector('#uploadAreaINSTAGRAM .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = '📦 Hələ miqdar seçilməyib';
+            document.getElementById('selectedPackageDisplayINSTAGRAM').classList.remove('active');
+            updateSummary('instagram');
+        }
+    }
+
+    function copyCardNumber() {
+        navigator.clipboard.writeText('5411249812047533').then(() => {
+            const btn = document.getElementById('copyCardBtn');
+            btn.textContent = '✅ Kopyalandı!';
+            btn.classList.add('copied');
+            showToast('📋 Kart nömrəsi kopyalandı!', 'success');
+            setTimeout(() => { btn.textContent = '📋 Kopyala'; btn.classList.remove('copied'); }, 2000);
+        }).catch(() => showToast('❌ Kopyalama alınmadı.', 'error'));
+    }
+
+    function showToast(msg, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = msg;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 3000);
+    }
+
+    // İlkin render
+    renderUC();
+    renderKLAN();
+    renderTikTok();
+    renderInstagram();
+
+    setTimeout(() => document.getElementById('waTooltip').classList.add('visible'), 1500);
+    setTimeout(() => document.getElementById('waTooltip').classList.remove('visible'), 6000);
 </script>
 </body>
 </html>
