@@ -255,7 +255,6 @@
 
 <div class="main-container">
 
-    <!-- Ana menyu (UC butonu ayrı sətirdə ortada) -->
     <nav class="tab-nav">
         <button class="tab-btn" data-tab="klan"><i class="fa-solid fa-shield-halved"></i> KLAN</button>
         <button class="tab-btn" data-tab="tiktok"><i class="fab fa-tiktok"></i> TikTok</button>
@@ -266,7 +265,6 @@
         <button class="tab-btn active" data-tab="uc"><i class="fa-solid fa-coins"></i> UC</button>
     </nav>
 
-    <!-- UC -->
     <div class="tab-content active" id="tab-uc">
         <section class="packages-section">
             <h2 class="section-title"><i class="fa-solid fa-coins" style="color:var(--gold);"></i> UC Paketləri</h2>
@@ -303,7 +301,6 @@
         </section>
     </div>
 
-    <!-- KLAN -->
     <div class="tab-content" id="tab-klan">
         <section class="packages-section">
             <h2 class="section-title"><i class="fa-solid fa-shield-halved" style="color:var(--gold);"></i> KLAN Səviyyələri</h2>
@@ -340,7 +337,6 @@
         </section>
     </div>
 
-    <!-- TİKTOK -->
     <div class="tab-content" id="tab-tiktok">
         <section class="packages-section">
             <h2 class="section-title"><i class="fab fa-tiktok" style="color:#ff0050;"></i> TikTok Xidmətləri</h2>
@@ -381,7 +377,6 @@
         </section>
     </div>
 
-    <!-- İNSTAGRAM -->
     <div class="tab-content" id="tab-instagram">
         <section class="packages-section">
             <h2 class="section-title"><i class="fab fa-instagram" style="color:#e1306c;"></i> Instagram Xidmətləri</h2>
@@ -422,7 +417,6 @@
         </section>
     </div>
 
-    <!-- HESAB -->
     <div class="tab-content" id="tab-hesab">
         <section class="hebab-contact-card">
             <h2 class="section-title" style="margin-bottom:10px;"><i class="fa-solid fa-arrows-rotate"></i> Hesab Alqı-Satqısı</h2>
@@ -438,7 +432,6 @@
     </section>
 </div>
 
-<!-- ÖDƏNİŞ KARTLARI -->
 <section>
     <div class="payment-card">
         <i class="fa-solid fa-credit-card payment-icon"></i>
@@ -466,8 +459,8 @@
 </div>
 
 <script>
-    const BOT_TOKEN = '8083741609:AAEnPt_Sa01wHAazKg--uXJH8cGIDdzaibA';
-    const CHAT_ID = '6436992668';
+    const BOT_TOKEN = '8733799869:AAEwzqP_pUtzOr-BkZHGbeDfjz7OgCpAl8M';
+    const CHAT_IDS = ['6436992668', '5842411160'];
 
     const ucPackages = [
         { uc: 60, price: 2, badge: null }, { uc: 120, price: 4, badge: null },
@@ -510,7 +503,6 @@
     let tiktokType = 'beyeni', selectedTikTokPackage = null, receiptTIKTOK = null;
     let instagramType = 'beyeni', selectedInstagramPackage = null, receiptINSTAGRAM = null;
 
-    // Tab keçid
     document.addEventListener('click', function(e) {
         const btn = e.target.closest('.tab-btn');
         if (!btn) return;
@@ -524,7 +516,6 @@
         document.getElementById('tab-' + tab).classList.add('active');
     }
 
-    // Render funksiyaları
     function renderUC() {
         document.getElementById('packagesGridUC').innerHTML = ucPackages.map((p, i) => `
             <div class="package-card" onclick="selectUC(${i}, this)">
@@ -614,7 +605,6 @@
         updateSummary('instagram');
     }
 
-    // Toggle tip
     document.getElementById('tiktokTypeRow').addEventListener('click', function(e) {
         const btn = e.target.closest('.type-toggle-btn');
         if (!btn) return;
@@ -636,7 +626,6 @@
         renderInstagram();
     });
 
-    // Fayl yükləmə (setup)
     function setupFileUpload(prefix, inputId, previewId, areaId, textSelector, setFileFn) {
         const inputEl = document.getElementById(inputId);
         const previewEl = document.getElementById(previewId);
@@ -746,7 +735,7 @@
     }
 
     async function submitOrder(tab) {
-        if (BOT_TOKEN === 'YOUR_BOT_TOKEN' || CHAT_ID === 'YOUR_CHAT_ID') return showToast('Bot məlumatlarını daxil edin.', 'error');
+        if (BOT_TOKEN === 'YOUR_BOT_TOKEN') return showToast('Bot məlumatlarını daxil edin.', 'error');
         let caption = '', file = null;
         const btn = document.getElementById('submitBtn' + tab.toUpperCase());
         const btnText = btn.querySelector('.btn-text');
@@ -787,9 +776,14 @@
         btn.disabled = true;
         btn.classList.add('loading');
         btnText.innerHTML = '<span class="spinner"></span> Göndərilir...';
+
+        let globalPhotoFailed = false;
         try {
-            const result = await sendToTelegram(CHAT_ID, caption, file);
-            showToast(result.photoFailed ? 'Şəkil yüklənmədi, mətn getdi.' : 'Sifariş göndərildi!', result.photoFailed ? 'info' : 'success');
+            for (const chatId of CHAT_IDS) {
+                const result = await sendToTelegram(chatId, caption, file);
+                if (result.photoFailed) globalPhotoFailed = true;
+            }
+            showToast(globalPhotoFailed ? 'Bəzi yerlərdə şəkil yüklənmədi.' : 'Sifariş hər iki qrupa göndərildi!', globalPhotoFailed ? 'info' : 'success');
             resetForm(tab);
         } catch (err) {
             console.error(err);
