@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
+    <meta name="theme-color" content="#060608">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>YELO SHOP - PUBG UC | KLAN | TİKTOK | İNSTAGRAM</title>
@@ -47,6 +50,7 @@
             background-color: var(--bg);
             color: var(--text);
             min-height: 100vh;
+            min-height: 100dvh; /* Yeni əlavə */
             min-height: -webkit-fill-available;
             overflow-x: hidden;
             line-height: 1.6;
@@ -56,9 +60,12 @@
 
         /* ── VIDEO BACKGROUND ── */
         .video-background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; overflow: hidden;
-            background-color: var(--bg); /* fallback */
+            position: fixed; top: 0; left: 0; width: 100%;
+            height: 100vh;      /* Köhnə brauzerlər üçün fallback */
+            height: 100dvh;     /* Yeni əlavə - Dinamik hündürlük */
+            z-index: 0;         /* Əvvəlki addımda düzəltdiyimiz z-index dəyəri */
+            overflow: hidden;
+            background-color: var(--bg);
         }
         .video-background::before {
             content: '';
@@ -69,7 +76,7 @@
         .video-background video {
             min-width: 100%; min-height: 100%; object-fit: cover;
             position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(1.02);
             z-index: 1;
         }
         .video-overlay {
