@@ -27,202 +27,619 @@
             --radius-lg: 20px;
             --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* ── MOBILE WHITE FLASH FIX ── */
+        html, body {
+            background-color: var(--bg) !important;
+        }
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior: none;
+            /* iOS overscroll bounce color fix */
+            background-attachment: fixed;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
-            background: transparent; color: var(--text); min-height: 100vh;
-            overflow-x: hidden; line-height: 1.6; -webkit-font-smoothing: antialiased;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overscroll-behavior-y: none;
         }
-        .video-background { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-2; overflow:hidden; }
-        .video-background video { min-width:100%; min-height:100%; object-fit:cover; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); }
-        .video-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:-1; pointer-events:none; }
-        .grid-overlay { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.03;
-            background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
-            background-size:50px 50px; mask-image:radial-gradient(ellipse at center, black 30%, transparent 70%);
-            -webkit-mask-image:radial-gradient(ellipse at center, black 30%, transparent 70%);
+
+        /* ── VIDEO BACKGROUND ── */
+        .video-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; overflow: hidden;
+            background-color: var(--bg); /* fallback */
         }
-        .main-container { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:20px 24px 40px; }
-        .header { text-align:center; padding:30px 20px 5px; position:relative; z-index:1; }
-        .logo-icon { font-size:50px; color:var(--gold); filter:drop-shadow(0 0 15px rgba(240,185,11,0.6)); display:block; margin-bottom:4px; }
+        .video-background::before {
+            content: '';
+            position: absolute; inset: -20px;
+            background: var(--bg);
+            z-index: 0;
+        }
+        .video-background video {
+            min-width: 100%; min-height: 100%; object-fit: cover;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        .video-overlay {
+            position: fixed; inset: -20px;
+            background: rgba(0,0,0,0.65);
+            z-index: -1; pointer-events: none;
+        }
+        .grid-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.025;
+            background-image: linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+
+        /* ── PREMIUM AMBIENT ORBS ── */
+        .ambient-orb {
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+            filter: blur(80px); opacity: 0;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        .ambient-orb-1 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(240,185,11,0.12) 0%, transparent 70%);
+            top: -100px; left: -100px;
+            animation-delay: 0s; animation-duration: 10s;
+            opacity: 1;
+        }
+        .ambient-orb-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(252,213,53,0.08) 0%, transparent 70%);
+            bottom: -80px; right: -80px;
+            animation-delay: -4s; animation-duration: 12s;
+            opacity: 1;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%       { transform: translate(30px, -20px) scale(1.05); }
+            66%       { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        /* ── LAYOUT ── */
+        .main-container {
+            position: relative; z-index: 1;
+            max-width: 1100px; margin: 0 auto; padding: 20px 24px 60px;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            text-align: center; padding: 36px 20px 8px;
+            position: relative; z-index: 1;
+            animation: headerReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        @keyframes headerReveal {
+            from { opacity: 0; transform: translateY(-24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .logo-icon {
+            font-size: 52px; color: var(--gold);
+            filter: drop-shadow(0 0 20px rgba(240,185,11,0.7));
+            display: block; margin-bottom: 6px;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%, 100% { filter: drop-shadow(0 0 16px rgba(240,185,11,0.6)); }
+            50%       { filter: drop-shadow(0 0 32px rgba(252,213,53,0.9)) drop-shadow(0 0 60px rgba(240,185,11,0.3)); }
+        }
         .logo-text {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-            font-size:clamp(36px,6vw,54px); font-weight:900;
-            background:linear-gradient(180deg, #fcd535 0%, #f0b90b 40%, #c99a08 100%);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-            filter:drop-shadow(0 2px 8px rgba(240,185,11,0.4)); display:block; line-height:1.1;
+            font-size: clamp(38px, 6vw, 56px); font-weight: 900;
+            background: linear-gradient(180deg, #fcd535 0%, #f0b90b 40%, #c99a08 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            filter: drop-shadow(0 2px 12px rgba(240,185,11,0.4));
+            display: block; line-height: 1.1;
+            animation: shimmerText 4s linear infinite;
+            background-size: 200% auto;
         }
-        .logo-subtitle { font-size:12px; font-weight:500; letter-spacing:6px; color:var(--gold-light); opacity:0.8; display:block; margin-top:2px; }
-        .header-divider { width:80px; height:2px; background:linear-gradient(90deg, transparent, var(--gold), transparent); margin:10px auto 0; border-radius:2px; }
+        @keyframes shimmerText {
+            0%   { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        .logo-subtitle {
+            font-size: 11px; font-weight: 600; letter-spacing: 6px;
+            color: var(--gold-light); opacity: 0.75;
+            display: block; margin-top: 4px; text-transform: uppercase;
+        }
+        .header-divider {
+            width: 100px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+            margin: 12px auto 0; border-radius: 2px;
+            animation: dividerGlow 2.5s ease-in-out infinite;
+            background-size: 200% auto;
+        }
+        @keyframes dividerGlow {
+            0%, 100% { opacity: 0.6; width: 80px; }
+            50%       { opacity: 1;   width: 120px; }
+        }
 
+        /* ── TAB NAV ── */
         .tab-nav {
-            display:flex; gap:6px; justify-content:center; flex-wrap:wrap; padding:4px 4px;
-            position:relative; z-index:2; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+            display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
+            padding: 8px 4px; position: relative; z-index: 2;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
-        .tab-nav::-webkit-scrollbar { height:0; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .tab-nav::-webkit-scrollbar { height: 0; }
         .tab-btn {
-            display:flex; align-items:center; gap:7px; padding:11px 18px; border-radius:28px;
-            border:1.5px solid var(--border); background:var(--surface); color:var(--text-secondary);
-            cursor:pointer; font-size:13px; font-weight:600; letter-spacing:0.5px; transition:var(--transition);
-            white-space:nowrap; font-family:inherit; -webkit-tap-highlight-color:transparent; user-select:none;
+            display: flex; align-items: center; gap: 7px;
+            padding: 11px 18px; border-radius: 28px;
+            border: 1.5px solid var(--border); background: var(--surface);
+            color: var(--text-secondary); cursor: pointer;
+            font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap; font-family: inherit;
+            -webkit-tap-highlight-color: transparent; user-select: none;
+            position: relative; overflow: hidden;
         }
-        .tab-btn i { font-size:16px; width:20px; text-align:center; }
-        .tab-btn:hover { border-color:#5a5a68; background:var(--surface2); }
-        .tab-btn:active { transform:scale(0.95); transition:0.1s; }
+        .tab-btn::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(240,185,11,0.1), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .tab-btn i { font-size: 15px; width: 18px; text-align: center; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .tab-btn:hover { border-color: #5a5a68; background: var(--surface2); color: var(--text); }
+        .tab-btn:hover i { transform: scale(1.2) rotate(-5deg); }
+        .tab-btn:hover::before { opacity: 1; }
+        .tab-btn:active { transform: scale(0.94); transition: transform 0.1s; }
         .tab-btn.active {
-            border-color:var(--border-active); background:var(--surface2); color:#fff;
-            box-shadow:var(--glow); font-weight:700;
+            border-color: var(--border-active); background: var(--surface2); color: #fff;
+            box-shadow: var(--glow), inset 0 0 20px rgba(240,185,11,0.04);
+            font-weight: 700;
+            animation: tabActiveGlow 2s ease-in-out infinite;
         }
-        .tab-content { display:none; position:relative; z-index:1; animation:fadeTab 0.35s ease; }
-        .tab-content.active { display:block; }
-        @keyframes fadeTab { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .tab-btn.active::before { opacity: 1; }
+        .tab-btn.active i { transform: scale(1.15); color: var(--gold-light); }
+        @keyframes tabActiveGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(240,185,11,0.2), inset 0 0 20px rgba(240,185,11,0.04); }
+            50%       { box-shadow: 0 0 35px rgba(240,185,11,0.35), inset 0 0 30px rgba(240,185,11,0.06); }
+        }
 
-        .section-title { font-size:clamp(18px,3vw,22px); font-weight:700; text-align:center; color:var(--text); margin-bottom:6px; position:relative; z-index:1; }
-        .section-subtitle { text-align:center; color:var(--text-secondary); font-size:13px; margin-bottom:20px; position:relative; z-index:1; }
+        /* ── TAB CONTENT ── */
+        .tab-content { display: none; position: relative; z-index: 1; }
+        .tab-content.active {
+            display: block;
+            animation: tabSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        @keyframes tabSlideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-        .packages-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-        @media (max-width:900px) { .packages-grid { grid-template-columns:repeat(3,1fr); gap:10px; } }
-        @media (max-width:600px) { .packages-grid { grid-template-columns:repeat(2,1fr); gap:8px; } }
-        @media (max-width:380px) { .packages-grid { grid-template-columns:1fr 1fr; gap:7px; } }
+        /* ── SECTION TITLES ── */
+        .section-title {
+            font-size: clamp(18px, 3vw, 22px); font-weight: 700;
+            text-align: center; color: var(--text);
+            margin-bottom: 6px; position: relative; z-index: 1;
+        }
+        .section-subtitle {
+            text-align: center; color: var(--text-secondary);
+            font-size: 13px; margin-bottom: 20px; position: relative; z-index: 1;
+        }
+
+        /* ── PACKAGES GRID ── */
+        .packages-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        @media (max-width: 900px) { .packages-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+        @media (max-width: 600px) { .packages-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
+        @media (max-width: 380px) { .packages-grid { grid-template-columns: 1fr 1fr; gap: 7px; } }
 
         .package-card {
-            background:var(--surface); border:2px solid var(--border); border-radius:var(--radius);
-            padding:16px 12px; cursor:pointer; transition:var(--transition); text-align:center;
-            position:relative; overflow:hidden; user-select:none; -webkit-tap-highlight-color:transparent;
+            background: var(--surface); border: 2px solid var(--border);
+            border-radius: var(--radius); padding: 18px 12px;
+            cursor: pointer; text-align: center; position: relative; overflow: hidden;
+            user-select: none; -webkit-tap-highlight-color: transparent;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+            animation: cardReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
-        .package-card::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(240,185,11,0.08) 0%, transparent 70%); opacity:0; transition:opacity 0.3s; pointer-events:none; border-radius:var(--radius); }
-        .package-card:hover { border-color:#4a4a55; transform:translateY(-3px); box-shadow:0 8px 28px rgba(0,0,0,0.5); }
-        .package-card:hover::after { opacity:1; }
-        .package-card:active { transform:scale(0.96); transition:0.1s; }
+        .package-card:nth-child(1)  { animation-delay: 0.05s; }
+        .package-card:nth-child(2)  { animation-delay: 0.08s; }
+        .package-card:nth-child(3)  { animation-delay: 0.11s; }
+        .package-card:nth-child(4)  { animation-delay: 0.14s; }
+        .package-card:nth-child(5)  { animation-delay: 0.17s; }
+        .package-card:nth-child(6)  { animation-delay: 0.20s; }
+        .package-card:nth-child(7)  { animation-delay: 0.23s; }
+        .package-card:nth-child(8)  { animation-delay: 0.26s; }
+        .package-card:nth-child(9)  { animation-delay: 0.29s; }
+        .package-card:nth-child(10) { animation-delay: 0.32s; }
+        .package-card:nth-child(11) { animation-delay: 0.35s; }
+        .package-card:nth-child(12) { animation-delay: 0.38s; }
+        .package-card:nth-child(13) { animation-delay: 0.41s; }
+        @keyframes cardReveal {
+            from { opacity: 0; transform: translateY(20px) scale(0.92); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Shimmer sweep on hover */
+        .package-card::before {
+            content: '';
+            position: absolute; top: -50%; left: -60%;
+            width: 60%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+            transform: skewX(-15deg);
+            transition: left 0.6s ease;
+            pointer-events: none;
+        }
+        .package-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, rgba(240,185,11,0.1) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s; pointer-events: none; border-radius: var(--radius);
+        }
+        .package-card:hover { border-color: #5a5a68; transform: translateY(-5px) scale(1.02); box-shadow: 0 12px 36px rgba(0,0,0,0.6); }
+        .package-card:hover::before { left: 120%; }
+        .package-card:hover::after  { opacity: 1; }
+        .package-card:active { transform: scale(0.95); transition: transform 0.1s; }
+
         .package-card.selected {
-            border-color:var(--border-active) !important; background:var(--surface2);
-            box-shadow:var(--glow); animation:selectedGlow 1.8s ease-in-out infinite; transform:translateY(-2px);
+            border-color: var(--border-active) !important;
+            background: linear-gradient(145deg, #1a1a22, #12121a);
+            box-shadow: 0 0 0 1px rgba(240,185,11,0.3), var(--glow);
+            transform: translateY(-4px) scale(1.03);
+            animation: selectedCardPulse 1.6s ease-in-out infinite;
         }
-        @keyframes selectedGlow {
-            0%,100% { box-shadow:0 0 20px rgba(240,185,11,0.2), 0 0 40px rgba(240,185,11,0.08); }
-            50% { box-shadow:0 0 30px rgba(240,185,11,0.35), 0 0 60px rgba(240,185,11,0.15); }
+        @keyframes selectedCardPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(240,185,11,0.25), 0 0 50px rgba(240,185,11,0.1), 0 0 0 1px rgba(240,185,11,0.3); }
+            50%       { box-shadow: 0 0 40px rgba(240,185,11,0.45), 0 0 80px rgba(240,185,11,0.2), 0 0 0 2px rgba(240,185,11,0.5); }
         }
-        .package-card.selected .check-badge { opacity:1; transform:scale(1); }
+        .package-card.selected .check-badge { opacity: 1; transform: scale(1) rotate(0deg); }
+
         .check-badge {
-            position:absolute; top:8px; right:8px; width:26px; height:26px; background:var(--gold);
-            border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px;
-            color:#000; font-weight:700; opacity:0; transform:scale(0.5); transition:var(--transition); z-index:2;
-            box-shadow:0 2px 10px rgba(240,185,11,0.5);
+            position: absolute; top: 8px; right: 8px;
+            width: 26px; height: 26px; background: var(--gold);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 13px; color: #000; font-weight: 700;
+            opacity: 0; transform: scale(0.3) rotate(-180deg);
+            transition: opacity 0.4s, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 2; box-shadow: 0 2px 12px rgba(240,185,11,0.6);
         }
-        .package-uc { font-size:clamp(16px,2.5vw,20px); font-weight:800; color:#fff; position:relative; z-index:1; }
-        .package-uc span { color:var(--gold-light); }
-        .package-price { font-size:13px; font-weight:600; color:var(--gold-light); margin-top:2px; }
-        .package-badge { display:inline-block; font-size:10px; font-weight:600; background:rgba(240,185,11,0.15); color:var(--gold-light); padding:3px 8px; border-radius:20px; margin-top:6px; }
-        .package-badge.best { background:rgba(240,185,11,0.25); color:#fff; font-weight:700; animation:badgeShine 2s ease-in-out infinite; }
-        @keyframes badgeShine { 0%,100% { background:rgba(240,185,11,0.25); } 50% { background:rgba(240,185,11,0.4); } }
+        .package-uc  { font-size: clamp(16px, 2.5vw, 20px); font-weight: 800; color: #fff; position: relative; z-index: 1; }
+        .package-uc span { color: var(--gold-light); }
+        .package-price { font-size: 13px; font-weight: 600; color: var(--gold-light); margin-top: 3px; }
+        .package-badge {
+            display: inline-block; font-size: 10px; font-weight: 600;
+            background: rgba(240,185,11,0.15); color: var(--gold-light);
+            padding: 3px 9px; border-radius: 20px; margin-top: 7px;
+        }
+        .package-badge.best {
+            background: linear-gradient(135deg, rgba(240,185,11,0.3), rgba(252,213,53,0.2));
+            color: #fff; font-weight: 700;
+            animation: badgeShine 1.8s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(240,185,11,0.2);
+        }
+        @keyframes badgeShine {
+            0%, 100% { background: linear-gradient(135deg, rgba(240,185,11,0.25), rgba(252,213,53,0.15)); }
+            50%       { background: linear-gradient(135deg, rgba(240,185,11,0.45), rgba(252,213,53,0.35)); box-shadow: 0 0 16px rgba(240,185,11,0.35); }
+        }
 
-        .type-toggle-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+        /* ── TYPE TOGGLE ── */
+        .type-toggle-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
         .type-toggle-btn {
-            padding:10px 22px; border-radius:25px; border:2px solid var(--border); background:var(--surface);
-            color:var(--text-secondary); cursor:pointer; font-weight:600; font-size:14px; transition:var(--transition);
-            font-family:inherit; display:flex; align-items:center; gap:6px;
+            padding: 11px 24px; border-radius: 25px;
+            border: 2px solid var(--border); background: var(--surface);
+            color: var(--text-secondary); cursor: pointer; font-weight: 600;
+            font-size: 14px; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: inherit; display: flex; align-items: center; gap: 7px;
+            position: relative; overflow: hidden;
         }
-        .type-toggle-btn i { font-size:14px; }
-        .type-toggle-btn:hover { border-color:#5a5a68; }
-        .type-toggle-btn.active { border-color:#ff0050; background:rgba(255,0,80,0.1); color:#ff4466; box-shadow:0 0 16px rgba(255,0,80,0.2); }
-        .type-toggle-btn.insta-active { border-color:#e1306c; background:rgba(225,48,108,0.1); color:#e9597e; box-shadow:0 0 16px rgba(225,48,108,0.2); }
-
-        .form-section { position:relative; z-index:1; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px 24px; margin-bottom:24px; box-shadow:var(--card-shadow); }
-        .form-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end; }
-        @media (max-width:700px) {
-            .form-row { flex-direction:column; gap:14px; }
-            .form-section { padding:20px 16px; }
-            .tab-btn { padding:9px 13px; font-size:11px; gap:4px; }
-            .tab-btn i { font-size:14px; width:18px; }
+        .type-toggle-btn i { font-size: 14px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .type-toggle-btn:hover { border-color: #5a5a68; transform: translateY(-2px); }
+        .type-toggle-btn:hover i { transform: scale(1.3); }
+        .type-toggle-btn.active {
+            border-color: #ff0050; background: rgba(255,0,80,0.12); color: #ff4466;
+            box-shadow: 0 0 20px rgba(255,0,80,0.25); transform: translateY(-2px);
         }
-        .form-group { flex:1; min-width:200px; }
-        .form-label { display:block; font-size:12px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:7px; }
-        .form-label i { margin-right:4px; width:14px; text-align:center; }
-        .form-input { width:100%; padding:13px 16px; background:var(--surface2); border:2px solid var(--border); border-radius:var(--radius-sm); color:#fff; font-family:inherit; font-size:15px; font-weight:500; transition:var(--transition); outline:none; }
-        .form-input:focus { border-color:var(--gold); box-shadow:0 0 0 4px rgba(240,185,11,0.08); }
-        .form-input::placeholder { color:#555; font-weight:400; }
+        .type-toggle-btn.insta-active {
+            border-color: #e1306c; background: rgba(225,48,108,0.12); color: #e9597e;
+            box-shadow: 0 0 20px rgba(225,48,108,0.25); transform: translateY(-2px);
+        }
 
-        .upload-area { position:relative; border:2px dashed var(--border); border-radius:var(--radius); padding:22px 20px; text-align:center; cursor:pointer; transition:var(--transition); background:var(--surface2); min-height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; overflow:hidden; }
-        .upload-area:hover { border-color:#5a5a68; background:#1a1a24; }
-        .upload-area.has-file { border-color:var(--success); border-style:solid; background:rgba(46,204,113,0.04); }
-        .upload-icon { font-size:36px; color:var(--text-secondary); transition:var(--transition); }
-        .upload-area.has-file .upload-icon { font-size:30px; color:var(--success); }
-        .upload-text { font-size:13px; color:var(--text-secondary); font-weight:500; }
-        .upload-area.has-file .upload-text { color:var(--success); }
-        .upload-preview { max-width:100%; max-height:140px; border-radius:8px; display:none; object-fit:contain; border:1px solid var(--border); }
-        .upload-area.has-file .upload-preview { display:block; }
-        .upload-area.has-file .upload-placeholder-group { display:none; }
-        .upload-placeholder-group { display:flex; flex-direction:column; align-items:center; gap:6px; }
-        .upload-hint { font-size:10px; color:#555; }
-        .remove-upload { position:absolute; top:8px; right:8px; width:26px; height:26px; border-radius:50%; background:rgba(231,76,60,0.8); border:none; color:#fff; font-size:14px; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:3; transition:var(--transition); line-height:1; }
-        .upload-area.has-file .remove-upload { display:flex; }
-        .remove-upload:hover { background:#e74c3c; transform:scale(1.1); }
+        /* ── FORM ── */
+        .form-section {
+            position: relative; z-index: 1;
+            background: linear-gradient(145deg, rgba(15,15,20,0.95), rgba(18,18,26,0.9));
+            border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 30px 26px; margin-bottom: 26px;
+            box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .form-row { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-end; }
+        @media (max-width: 700px) {
+            .form-row    { flex-direction: column; gap: 14px; }
+            .form-section { padding: 20px 16px; }
+            .tab-btn { padding: 9px 13px; font-size: 12px; gap: 5px; }
+            .tab-btn i { font-size: 14px; width: 16px; }
+        }
+        .form-group { flex: 1; min-width: 200px; }
+        .form-label {
+            display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px;
+        }
+        .form-label i { margin-right: 5px; width: 14px; text-align: center; color: var(--gold); }
+        .form-input {
+            width: 100%; padding: 14px 16px;
+            background: var(--surface2); border: 2px solid var(--border);
+            border-radius: var(--radius-sm); color: #fff;
+            font-family: inherit; font-size: 15px; font-weight: 500;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(240,185,11,0.1), 0 0 20px rgba(240,185,11,0.08);
+            background: #1a1a24;
+        }
+        .form-input::placeholder { color: #484858; font-weight: 400; }
 
-        .selected-package-display { text-align:center; min-height:42px; display:flex; align-items:center; justify-content:center; gap:8px; font-weight:500; font-size:14px; color:var(--text-secondary); padding:6px 0; }
-        .selected-package-display.active { color:#fff; font-weight:600; }
-        .selected-package-display .highlight { color:var(--gold-light); font-weight:700; }
+        /* ── UPLOAD AREA ── */
+        .upload-area {
+            position: relative; border: 2px dashed var(--border);
+            border-radius: var(--radius); padding: 22px 20px;
+            text-align: center; cursor: pointer; transition: all 0.35s ease;
+            background: var(--surface2); min-height: 100px;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; gap: 8px; overflow: hidden;
+        }
+        .upload-area::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, rgba(240,185,11,0.05), transparent 70%);
+            opacity: 0; transition: opacity 0.35s;
+        }
+        .upload-area:hover { border-color: #5a5a68; background: #1a1a24; }
+        .upload-area:hover::before { opacity: 1; }
+        .upload-area.has-file { border-color: var(--success); border-style: solid; background: rgba(46,204,113,0.04); }
+        .upload-area.has-file::before { opacity: 0; }
+        .upload-icon { font-size: 36px; color: var(--text-secondary); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .upload-area:hover .upload-icon { color: var(--gold); transform: translateY(-4px) scale(1.1); }
+        .upload-area.has-file .upload-icon { font-size: 28px; color: var(--success); transform: none; }
+        .upload-text { font-size: 13px; color: var(--text-secondary); font-weight: 500; transition: color 0.3s; }
+        .upload-area:hover .upload-text { color: var(--text); }
+        .upload-area.has-file .upload-text { color: var(--success); }
+        .upload-preview {
+            max-width: 100%; max-height: 140px; border-radius: 8px;
+            display: none; object-fit: contain; border: 1px solid var(--border);
+        }
+        .upload-area.has-file .upload-preview { display: block; }
+        .upload-area.has-file .upload-placeholder-group { display: none; }
+        .upload-placeholder-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .upload-hint { font-size: 10px; color: #484858; }
+        .remove-upload {
+            position: absolute; top: 8px; right: 8px; width: 26px; height: 26px;
+            border-radius: 50%; background: rgba(231,76,60,0.85); border: none;
+            color: #fff; font-size: 13px; cursor: pointer; display: none;
+            align-items: center; justify-content: center; z-index: 3;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); line-height: 1;
+        }
+        .upload-area.has-file .remove-upload { display: flex; animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes popIn {
+            from { transform: scale(0) rotate(-90deg); }
+            to   { transform: scale(1) rotate(0deg); }
+        }
+        .remove-upload:hover { background: #e74c3c; transform: scale(1.15) rotate(90deg); }
 
-        .btn-submit { display:flex; width:100%; max-width:400px; margin:20px auto 0; padding:16px 32px; background:linear-gradient(135deg, #f0b90b 0%, #d4a30a 50%, #b8890a 100%); border:none; border-radius:50px; color:#000; font-size:16px; font-weight:700; cursor:pointer; transition:var(--transition); text-transform:uppercase; box-shadow:0 6px 24px rgba(240,185,11,0.3); font-family:inherit; align-items:center; justify-content:center; gap:10px; }
-        .btn-submit i { font-size:16px; }
-        .btn-submit:hover { box-shadow:0 10px 36px rgba(240,185,11,0.5); transform:translateY(-2px); }
-        .btn-submit:active { transform:scale(0.96); box-shadow:0 4px 16px rgba(240,185,11,0.25); transition:0.1s; }
-        .btn-submit:disabled { opacity:0.5; cursor:not-allowed; pointer-events:none; filter:grayscale(30%); }
-        .btn-submit .spinner { display:none; width:20px; height:20px; border:2.5px solid #000; border-top:2.5px solid transparent; border-radius:50%; animation:spin 0.7s linear infinite; }
-        .btn-submit.loading .spinner { display:inline-block; }
-        .btn-submit.loading .btn-text i { display:none; }
-        @keyframes spin { to { transform:rotate(360deg); } }
+        /* ── SELECTED DISPLAY ── */
+        .selected-package-display {
+            text-align: center; min-height: 44px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-weight: 500; font-size: 14px; color: var(--text-secondary); padding: 8px 0;
+            transition: all 0.4s ease;
+        }
+        .selected-package-display.active { color: #fff; font-weight: 600; }
+        .selected-package-display .highlight { color: var(--gold-light); font-weight: 700; }
 
+        /* ── SUBMIT BUTTON ── */
+        .btn-submit {
+            display: flex; width: 100%; max-width: 420px; margin: 22px auto 0;
+            padding: 17px 32px;
+            background: linear-gradient(135deg, #fcd535 0%, #f0b90b 45%, #d4a30a 75%, #b8890a 100%);
+            background-size: 200% auto;
+            border: none; border-radius: 50px; color: #000;
+            font-size: 15px; font-weight: 800; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 6px 28px rgba(240,185,11,0.35);
+            font-family: inherit; align-items: center; justify-content: center; gap: 10px;
+            position: relative; overflow: hidden;
+        }
+        .btn-submit::before {
+            content: '';
+            position: absolute; top: -50%; left: -60%;
+            width: 60%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-15deg);
+            transition: left 0.6s ease;
+        }
+        .btn-submit:hover::before { left: 120%; }
+        .btn-submit i { font-size: 16px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .btn-submit:hover {
+            box-shadow: 0 12px 40px rgba(240,185,11,0.55); transform: translateY(-3px) scale(1.01);
+            background-position: right center;
+        }
+        .btn-submit:hover i { transform: translateX(3px) rotate(-10deg); }
+        .btn-submit:active { transform: scale(0.96); box-shadow: 0 4px 16px rgba(240,185,11,0.25); transition: transform 0.1s, box-shadow 0.1s; }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; filter: grayscale(30%); }
+        .btn-submit .spinner {
+            display: none; width: 20px; height: 20px;
+            border: 2.5px solid rgba(0,0,0,0.3); border-top: 2.5px solid #000;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+        }
+        .btn-submit.loading .spinner { display: inline-block; }
+        .btn-submit.loading .btn-text i { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── PAYMENT CARD ── */
         .payment-card {
-            background:linear-gradient(145deg, #1a1a24 0%, #12121a 100%);
-            border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px 28px;
-            display:flex; align-items:center; gap:20px; flex-wrap:wrap; box-shadow:var(--card-shadow);
-            position:relative; overflow:hidden; margin-bottom:24px; z-index:1;
+            background: linear-gradient(145deg, #1a1a26 0%, #111119 100%);
+            border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 24px 28px; display: flex; align-items: center;
+            gap: 20px; flex-wrap: wrap;
+            box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.04);
+            position: relative; overflow: hidden; margin-bottom: 18px; z-index: 1;
+            transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .payment-card::before { content:''; position:absolute; top:-40px; right:-40px; width:120px; height:120px; background:radial-gradient(circle, rgba(240,185,11,0.1) 0%, transparent 70%); border-radius:50%; pointer-events:none; }
-        @media (max-width:550px) { .payment-card { flex-direction:column; align-items:flex-start; padding:18px 16px; gap:12px; } }
-        .payment-icon { font-size:38px; color:var(--gold); flex-shrink:0; filter:drop-shadow(0 0 8px rgba(240,185,11,0.3)); }
-        .payment-details { flex:1; min-width:180px; position:relative; z-index:1; }
-        .payment-label { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:4px; }
-        .payment-card-number { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif; font-size:clamp(17px,3vw,22px); font-weight:700; letter-spacing:3px; color:#fff; word-break:break-all; }
-        .payment-bank { font-size:11px; font-weight:500; color:var(--gold-light); letter-spacing:1px; margin-top:2px; }
-        .copy-btn { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#ccc; padding:9px 16px; border-radius:25px; cursor:pointer; font-size:12px; font-weight:500; transition:var(--transition); white-space:nowrap; z-index:1; font-family:inherit; display:flex; align-items:center; gap:6px; }
-        .copy-btn:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.3); color:#fff; }
-        .copy-btn.copied { background:rgba(46,204,113,0.2); border-color:var(--success); color:var(--success); }
+        .payment-card::before {
+            content: '';
+            position: absolute; top: -50px; right: -50px;
+            width: 160px; height: 160px;
+            background: radial-gradient(circle, rgba(240,185,11,0.1) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none;
+            transition: all 0.5s;
+        }
+        .payment-card:hover { border-color: rgba(240,185,11,0.3); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 30px rgba(240,185,11,0.08); }
+        .payment-card:hover::before { transform: scale(1.3); opacity: 1.4; }
+        @media (max-width: 550px) { .payment-card { flex-direction: column; align-items: flex-start; padding: 18px 16px; gap: 12px; } }
+        .payment-icon {
+            font-size: 40px; color: var(--gold); flex-shrink: 0;
+            filter: drop-shadow(0 0 12px rgba(240,185,11,0.4));
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-4px); }
+        }
+        .payment-card:hover .payment-icon { transform: scale(1.1) rotate(-8deg); filter: drop-shadow(0 0 20px rgba(240,185,11,0.7)); }
+        .payment-details { flex: 1; min-width: 180px; position: relative; z-index: 1; }
+        .payment-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 5px; }
+        .payment-card-number {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            font-size: clamp(17px, 3vw, 22px); font-weight: 700;
+            letter-spacing: 3px; color: #fff; word-break: break-all;
+        }
+        .payment-bank { font-size: 11px; font-weight: 600; color: var(--gold-light); letter-spacing: 1px; margin-top: 3px; }
+        .copy-btn {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+            color: #ccc; padding: 10px 18px; border-radius: 25px; cursor: pointer;
+            font-size: 12px; font-weight: 600; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap; z-index: 1; font-family: inherit;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .copy-btn i { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .copy-btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); color: #fff; transform: scale(1.05); }
+        .copy-btn:hover i { transform: scale(1.2) rotate(-10deg); }
+        .copy-btn.copied { background: rgba(46,204,113,0.2); border-color: var(--success); color: var(--success); }
 
-        .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:999; width:60px; height:60px; background:var(--whatsapp); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 24px rgba(37,211,102,0.45); transition:var(--transition); text-decoration:none; animation:waPulse 2.2s ease-in-out infinite; color:#fff; font-size:28px; }
-        .whatsapp-float:hover { transform:scale(1.12); box-shadow:0 10px 36px rgba(37,211,102,0.6); background:#20bd5a; }
-        @keyframes waPulse { 0%,100% { box-shadow:0 6px 24px rgba(37,211,102,0.45); } 50% { box-shadow:0 6px 40px rgba(37,211,102,0.7), 0 0 0 16px rgba(37,211,102,0); } }
-        .whatsapp-tooltip { position:fixed; bottom:100px; right:20px; z-index:998; background:#1a1a24; color:#fff; padding:10px 16px; border-radius:20px; font-size:12px; font-weight:500; pointer-events:none; opacity:0; transform:translateY(10px); transition:var(--transition); border:1px solid var(--border); white-space:nowrap; letter-spacing:0.5px; box-shadow:0 4px 16px rgba(0,0,0,0.5); }
-        .whatsapp-tooltip.visible { opacity:1; transform:translateY(0); }
+        /* ── WHATSAPP ── */
+        .whatsapp-float {
+            position: fixed; bottom: 28px; right: 28px; z-index: 999;
+            width: 62px; height: 62px; background: var(--whatsapp);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 6px 28px rgba(37,211,102,0.5);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none; color: #fff; font-size: 28px;
+            animation: waPulse 2.5s ease-in-out infinite;
+        }
+        .whatsapp-float i { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .whatsapp-float:hover { transform: scale(1.14) rotate(-8deg); box-shadow: 0 12px 40px rgba(37,211,102,0.65); background: #20bd5a; }
+        .whatsapp-float:hover i { transform: scale(1.1) rotate(8deg); }
+        @keyframes waPulse {
+            0%, 100% { box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
+            50%       { box-shadow: 0 6px 50px rgba(37,211,102,0.75), 0 0 0 18px rgba(37,211,102,0); }
+        }
+        .whatsapp-tooltip {
+            position: fixed; bottom: 102px; right: 20px; z-index: 998;
+            background: #1a1a26; color: #fff; padding: 10px 16px;
+            border-radius: 20px; font-size: 12px; font-weight: 600;
+            pointer-events: none; opacity: 0; transform: translateY(12px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--border); white-space: nowrap; letter-spacing: 0.5px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+        .whatsapp-tooltip.visible { opacity: 1; transform: translateY(0) scale(1); }
 
-        .toast-container { position:fixed; top:24px; right:24px; z-index:1000; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
-        .toast { background:var(--surface2); border:1px solid var(--border); padding:14px 20px; border-radius:12px; color:#fff; font-size:13px; font-weight:500; box-shadow:0 8px 28px rgba(0,0,0,0.5); animation:slideIn 0.4s ease-out, fadeOut 0.35s ease-in forwards; animation-delay:0s, 2.5s; pointer-events:auto; max-width:380px; letter-spacing:0.3px; display:flex; align-items:center; gap:8px; }
-        .toast i { font-size:16px; }
-        .toast.success { border-left:3px solid var(--success); }
-        .toast.success i { color:var(--success); }
-        .toast.error { border-left:3px solid var(--danger); }
-        .toast.error i { color:var(--danger); }
-        .toast.info { border-left:3px solid var(--gold); }
-        .toast.info i { color:var(--gold); }
-        @keyframes slideIn { from { transform:translateX(120%); opacity:0; } to { transform:translateX(0); opacity:1; } }
-        @keyframes fadeOut { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(60%); } }
+        /* ── TOAST ── */
+        .toast-container { position: fixed; top: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast {
+            background: linear-gradient(145deg, #1e1e2a, #161621);
+            border: 1px solid var(--border); padding: 14px 20px;
+            border-radius: 14px; color: #fff; font-size: 13px; font-weight: 500;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+            animation: toastIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), toastOut 0.35s ease-in 2.6s forwards;
+            pointer-events: auto; max-width: 340px; letter-spacing: 0.3px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .toast i { font-size: 17px; }
+        .toast.success { border-left: 3px solid var(--success); }
+        .toast.success i { color: var(--success); }
+        .toast.error   { border-left: 3px solid var(--danger); }
+        .toast.error i  { color: var(--danger); }
+        .toast.info    { border-left: 3px solid var(--gold); }
+        .toast.info i   { color: var(--gold); }
+        @keyframes toastIn  { from { transform: translateX(120%) scale(0.8); opacity: 0; } to { transform: translateX(0) scale(1); opacity: 1; } }
+        @keyframes toastOut { from { transform: translateX(0) scale(1); opacity: 1; } to { transform: translateX(80%) scale(0.85); opacity: 0; } }
 
-        .footer { text-align:center; padding:20px; color:#aaa; font-size:11px; letter-spacing:0.8px; position:relative; z-index:1; }
-        .footer span { color:var(--gold-dark); font-weight:600; }
+        /* ── HESAB / CONTACT ── */
+        .hebab-contact-card {
+            text-align: center; padding: 40px 30px;
+            background: linear-gradient(145deg, rgba(15,15,20,0.95), rgba(18,18,26,0.9));
+            border-radius: var(--radius-lg); border: 1px solid var(--border);
+        }
+        .btn-wa-big {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, #25d366, #20bd5a);
+            color: #fff; padding: 15px 32px; border-radius: 50px;
+            font-weight: 700; font-size: 15px; text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 6px 28px rgba(37,211,102,0.35);
+            position: relative; overflow: hidden;
+        }
+        .btn-wa-big::before {
+            content: '';
+            position: absolute; top: -50%; left: -60%;
+            width: 60%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-15deg); transition: left 0.6s;
+        }
+        .btn-wa-big:hover::before { left: 120%; }
+        .btn-wa-big i { font-size: 22px; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .btn-wa-big:hover { background: linear-gradient(135deg, #20bd5a, #1aad50); box-shadow: 0 12px 40px rgba(37,211,102,0.55); transform: translateY(-3px) scale(1.02); }
+        .btn-wa-big:hover i { transform: rotate(-10deg) scale(1.2); }
 
-        .selection-summary { background:var(--surface2); border-radius:var(--radius-sm); padding:10px 16px; margin-top:12px; font-size:13px; color:var(--text-secondary); text-align:center; letter-spacing:0.3px; transition:var(--transition); border:1px solid transparent; }
-        .selection-summary.filled { border-color:var(--border-active); color:#fff; background:rgba(240,185,11,0.04); }
-        .selection-summary strong { color:var(--gold-light); }
+        /* ── SELECTION SUMMARY ── */
+        .selection-summary {
+            background: rgba(255,255,255,0.02); border-radius: var(--radius-sm);
+            padding: 10px 16px; margin-top: 14px; font-size: 13px;
+            color: var(--text-secondary); text-align: center;
+            letter-spacing: 0.3px; transition: all 0.4s ease;
+            border: 1px solid transparent;
+        }
+        .selection-summary.filled { border-color: rgba(240,185,11,0.3); color: #fff; background: rgba(240,185,11,0.04); }
+        .selection-summary strong { color: var(--gold-light); }
 
-        .hebab-contact-card { text-align:center; padding:30px; background:var(--surface); border-radius:var(--radius-lg); border:1px solid var(--border); }
-        .btn-wa-big { display:inline-flex; align-items:center; gap:8px; background:var(--whatsapp); color:#fff; padding:14px 28px; border-radius:50px; font-weight:700; font-size:15px; text-decoration:none; transition:var(--transition); box-shadow:0 6px 24px rgba(37,211,102,0.3); }
-        .btn-wa-big i { font-size:22px; }
-        .btn-wa-big:hover { background:#20bd5a; box-shadow:0 10px 36px rgba(37,211,102,0.5); transform:translateY(-2px); }
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center; padding: 24px 20px;
+            color: #777; font-size: 11px; letter-spacing: 0.8px;
+            position: relative; z-index: 1;
+        }
+        .footer span { color: var(--gold-dark); font-weight: 600; }
 
-        ::-webkit-scrollbar { width:5px; }
-        ::-webkit-scrollbar-track { background:transparent; }
-        ::-webkit-scrollbar-thumb { background:#2a2a35; border-radius:10px; }
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2a2a38; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -234,653 +651,666 @@
     </div>
     <div class="video-overlay"></div>
     <div class="grid-overlay"></div>
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
 
     <div class="toast-container" id="toastContainer"></div>
     <div class="whatsapp-tooltip" id="waTooltip"><i class="fab fa-whatsapp"></i> WhatsApp ilə əlaqə</div>
 
     <a href="https://wa.me/994513084409?text=Salam,%20YELO%20SHOP-dan%20sifari%C5%9F%20etm%C9%99k%20ist%C9%99yir%C9%99m."
-    class="whatsapp-float" id="whatsappBtn" target="_blank" rel="noopener noreferrer"
-    onmouseenter="document.getElementById('waTooltip').classList.add('visible')"
-    onmouseleave="document.getElementById('waTooltip').classList.remove('visible')"
-    onclick="document.getElementById('waTooltip').classList.remove('visible')">
-    <i class="fab fa-whatsapp"></i>
-</a>
+       class="whatsapp-float" id="whatsappBtn" target="_blank" rel="noopener noreferrer"
+       onmouseenter="document.getElementById('waTooltip').classList.add('visible')"
+       onmouseleave="document.getElementById('waTooltip').classList.remove('visible')"
+       onclick="document.getElementById('waTooltip').classList.remove('visible')">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-<header class="header">
-    <i class="fa-solid fa-store logo-icon"></i>
-    <span class="logo-text">YELO SHOP</span>
-    <span class="logo-subtitle">PUBG UC • KLAN • TİKTOK • İNSTAGRAM</span>
-    <div class="header-divider"></div>
-</header>
+    <header class="header">
+        <i class="fa-solid fa-store logo-icon"></i>
+        <span class="logo-text">YELO SHOP</span>
+        <span class="logo-subtitle">PUBG UC • KLAN • TİKTOK • İNSTAGRAM</span>
+        <div class="header-divider"></div>
+    </header>
 
-<div class="main-container">
+    <div class="main-container">
 
-    <nav class="tab-nav">
-        <button class="tab-btn" data-tab="klan"><i class="fa-solid fa-shield-halved"></i> KLAN</button>
-        <button class="tab-btn" data-tab="tiktok"><i class="fab fa-tiktok"></i> TikTok</button>
-        <button class="tab-btn" data-tab="instagram"><i class="fab fa-instagram"></i> Instagram</button>
-        <button class="tab-btn" data-tab="hesab"><i class="fa-solid fa-arrows-rotate"></i> HESAB</button>
-    </nav>
-    <nav class="tab-nav" style="margin-top:8px;">
-        <button class="tab-btn active" data-tab="uc"><i class="fa-solid fa-coins"></i> UC</button>
-    </nav>
+        <nav class="tab-nav">
+            <button class="tab-btn" data-tab="klan"><i class="fa-solid fa-shield-halved"></i> KLAN</button>
+            <button class="tab-btn" data-tab="tiktok"><i class="fab fa-tiktok"></i> TikTok</button>
+            <button class="tab-btn" data-tab="instagram"><i class="fab fa-instagram"></i> Instagram</button>
+            <button class="tab-btn" data-tab="hesab"><i class="fa-solid fa-arrows-rotate"></i> HESAB</button>
+        </nav>
+        <nav class="tab-nav" style="margin-top:4px;">
+            <button class="tab-btn active" data-tab="uc"><i class="fa-solid fa-coins"></i> UC</button>
+        </nav>
 
-    <div class="tab-content active" id="tab-uc">
-        <section class="packages-section">
-            <h2 class="section-title"><i class="fa-solid fa-coins" style="color:var(--gold);"></i> UC Paketləri</h2>
-            <p class="section-subtitle">Aşağıdan istədiyiniz paketi seçin</p>
-            <div class="packages-grid" id="packagesGridUC"></div>
-            <div class="selected-package-display" id="selectedPackageDisplayUC"><i class="fa-solid fa-box-open"></i> Hələ paket seçilməyib</div>
-        </section>
-        <section class="form-section">
-            <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
-            <p class="section-subtitle" style="margin-bottom:18px;">Məlumatları doldurun və qəbz şəklini yükləyin</p>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="playerId"><i class="fa-solid fa-gamepad"></i> Oyunçu ID</label>
-                    <input type="text" class="form-input" id="playerId" placeholder="Məs: 5123456789" maxlength="20">
-                </div>
-                <div class="form-group">
-                    <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
-                    <div class="upload-area" id="uploadAreaUC" onclick="document.getElementById('receiptInputUC').click()">
-                        <div class="upload-placeholder-group">
-                            <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-                            <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
-                            <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
-                        </div>
-                        <img class="upload-preview" id="uploadPreviewUC" alt="Önizləmə">
-                        <button class="remove-upload" id="removeUploadUC" onclick="removeFileUC(event)"><i class="fa-solid fa-times"></i></button>
+        <!-- UC TAB -->
+        <div class="tab-content active" id="tab-uc">
+            <section class="packages-section">
+                <h2 class="section-title"><i class="fa-solid fa-coins" style="color:var(--gold);"></i> UC Paketləri</h2>
+                <p class="section-subtitle">Aşağıdan istədiyiniz paketi seçin</p>
+                <div class="packages-grid" id="packagesGridUC"></div>
+                <div class="selected-package-display" id="selectedPackageDisplayUC"><i class="fa-solid fa-box-open"></i> Hələ paket seçilməyib</div>
+            </section>
+            <section class="form-section">
+                <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
+                <p class="section-subtitle" style="margin-bottom:18px;">Məlumatları doldurun və qəbz şəklini yükləyin</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="playerId"><i class="fa-solid fa-gamepad"></i> Oyunçu ID</label>
+                        <input type="text" class="form-input" id="playerId" placeholder="Məs: 5123456789" maxlength="20">
                     </div>
-                    <input type="file" id="receiptInputUC" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleFileSelectUC(event)">
-                </div>
-            </div>
-            <div class="selection-summary" id="selectionSummaryUC"><i class="fa-solid fa-receipt"></i> Seçilmiş paket, Oyunçu ID və Qəbz birlikdə göndəriləcək</div>
-            <button class="btn-submit" id="submitBtnUC" onclick="submitOrder('uc')">
-                <span class="spinner"></span> <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
-            </button>
-        </section>
-    </div>
-
-    <div class="tab-content" id="tab-klan">
-        <section class="packages-section">
-            <h2 class="section-title"><i class="fa-solid fa-shield-halved" style="color:var(--gold);"></i> KLAN Səviyyələri</h2>
-            <p class="section-subtitle">İstədiyiniz klan səviyyəsini seçin</p>
-            <div class="packages-grid" id="packagesGridKLAN"></div>
-            <div class="selected-package-display" id="selectedPackageDisplayKLAN"><i class="fa-solid fa-box-open"></i> Hələ səviyyə seçilməyib</div>
-        </section>
-        <section class="form-section">
-            <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
-            <p class="section-subtitle" style="margin-bottom:18px;">Telefon nömrənizi daxil edin</p>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="klanPhone"><i class="fa-solid fa-mobile-screen-button"></i> Telefon Nömrəsi</label>
-                    <input type="tel" class="form-input" id="klanPhone" placeholder="Məs: 0513084409" maxlength="15">
-                </div>
-                <div class="form-group">
-                    <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
-                    <div class="upload-area" id="uploadAreaKLAN" onclick="document.getElementById('receiptInputKLAN').click()">
-                        <div class="upload-placeholder-group">
-                            <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-                            <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
-                            <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
+                        <div class="upload-area" id="uploadAreaUC" onclick="document.getElementById('receiptInputUC').click()">
+                            <div class="upload-placeholder-group">
+                                <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                                <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
+                                <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
+                            </div>
+                            <img class="upload-preview" id="uploadPreviewUC" alt="Önizləmə">
+                            <button class="remove-upload" id="removeUploadUC"><i class="fa-solid fa-times"></i></button>
                         </div>
-                        <img class="upload-preview" id="uploadPreviewKLAN" alt="Önizləmə">
-                        <button class="remove-upload" id="removeUploadKLAN" onclick="removeFileKLAN(event)"><i class="fa-solid fa-times"></i></button>
+                        <input type="file" id="receiptInputUC" accept="image/png,image/jpeg,image/jpg" style="display:none">
                     </div>
-                    <input type="file" id="receiptInputKLAN" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleFileSelectKLAN(event)">
                 </div>
-            </div>
-            <div class="selection-summary" id="selectionSummaryKLAN"><i class="fa-solid fa-receipt"></i> Seçilmiş səviyyə, Telefon və Qəbz birlikdə göndəriləcək</div>
-            <button class="btn-submit" id="submitBtnKLAN" onclick="submitOrder('klan')">
-                <span class="spinner"></span> <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
-            </button>
-        </section>
-    </div>
-
-    <div class="tab-content" id="tab-tiktok">
-        <section class="packages-section">
-            <h2 class="section-title"><i class="fab fa-tiktok" style="color:#ff0050;"></i> TikTok Xidmətləri</h2>
-            <p class="section-subtitle">Xidmət növü və miqdar seçin</p>
-            <div class="type-toggle-row" id="tiktokTypeRow">
-                <button class="type-toggle-btn active" data-tt="beyeni"><i class="fa-solid fa-thumbs-up"></i> Bəyəni</button>
-                <button class="type-toggle-btn" data-tt="takib"><i class="fa-solid fa-user-plus"></i> Takib</button>
-            </div>
-            <div class="packages-grid" id="packagesGridTIKTOK"></div>
-            <div class="selected-package-display" id="selectedPackageDisplayTIKTOK"><i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib</div>
-        </section>
-        <section class="form-section">
-            <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
-            <p class="section-subtitle" style="margin-bottom:18px;">Linki daxil edin</p>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="tiktokLink"><i class="fa-solid fa-link"></i> <span id="tiktokLinkLabel">Video Linki</span></label>
-                    <input type="text" class="form-input" id="tiktokLink" placeholder="https://www.tiktok.com/..." maxlength="300">
-                </div>
-                <div class="form-group">
-                    <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
-                    <div class="upload-area" id="uploadAreaTIKTOK" onclick="document.getElementById('receiptInputTIKTOK').click()">
-                        <div class="upload-placeholder-group">
-                            <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-                            <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
-                            <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
-                        </div>
-                        <img class="upload-preview" id="uploadPreviewTIKTOK" alt="Önizləmə">
-                        <button class="remove-upload" id="removeUploadTIKTOK" onclick="removeFileTIKTOK(event)"><i class="fa-solid fa-times"></i></button>
-                    </div>
-                    <input type="file" id="receiptInputTIKTOK" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleFileSelectTIKTOK(event)">
-                </div>
-            </div>
-            <div class="selection-summary" id="selectionSummaryTIKTOK"><i class="fa-solid fa-receipt"></i> Seçilmiş xidmət, miqdar, link və qəbz birlikdə göndəriləcək</div>
-            <button class="btn-submit" id="submitBtnTIKTOK" onclick="submitOrder('tiktok')">
-                <span class="spinner"></span> <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
-            </button>
-        </section>
-    </div>
-
-    <div class="tab-content" id="tab-instagram">
-        <section class="packages-section">
-            <h2 class="section-title"><i class="fab fa-instagram" style="color:#e1306c;"></i> Instagram Xidmətləri</h2>
-            <p class="section-subtitle">Xidmət növü və miqdar seçin</p>
-            <div class="type-toggle-row" id="instaTypeRow">
-                <button class="type-toggle-btn active insta-active" data-ig="beyeni"><i class="fa-solid fa-heart"></i> Bəyəni</button>
-                <button class="type-toggle-btn insta-active" data-ig="takib"><i class="fa-solid fa-user-plus"></i> Takib</button>
-            </div>
-            <div class="packages-grid" id="packagesGridINSTAGRAM"></div>
-            <div class="selected-package-display" id="selectedPackageDisplayINSTAGRAM"><i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib</div>
-        </section>
-        <section class="form-section">
-            <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
-            <p class="section-subtitle" style="margin-bottom:18px;">Linki daxil edin</p>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="instaLink"><i class="fa-solid fa-link"></i> <span id="instaLinkLabel">Post Linki</span></label>
-                    <input type="text" class="form-input" id="instaLink" placeholder="https://www.instagram.com/..." maxlength="300">
-                </div>
-                <div class="form-group">
-                    <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
-                    <div class="upload-area" id="uploadAreaINSTAGRAM" onclick="document.getElementById('receiptInputINSTAGRAM').click()">
-                        <div class="upload-placeholder-group">
-                            <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-                            <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
-                            <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
-                        </div>
-                        <img class="upload-preview" id="uploadPreviewINSTAGRAM" alt="Önizləmə">
-                        <button class="remove-upload" id="removeUploadINSTAGRAM" onclick="removeFileINSTAGRAM(event)"><i class="fa-solid fa-times"></i></button>
-                    </div>
-                    <input type="file" id="receiptInputINSTAGRAM" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleFileSelectINSTAGRAM(event)">
-                </div>
-            </div>
-            <div class="selection-summary" id="selectionSummaryINSTAGRAM"><i class="fa-solid fa-receipt"></i> Seçilmiş xidmət, miqdar, link və qəbz birlikdə göndəriləcək</div>
-            <button class="btn-submit" id="submitBtnINSTAGRAM" onclick="submitOrder('instagram')">
-                <span class="spinner"></span> <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
-            </button>
-        </section>
-    </div>
-
-    <div class="tab-content" id="tab-hesab">
-        <section class="hebab-contact-card">
-            <h2 class="section-title" style="margin-bottom:10px;"><i class="fa-solid fa-arrows-rotate"></i> Hesab Alqı-Satqısı</h2>
-            <p class="section-subtitle" style="margin-bottom:20px;">
-                PUBG hesab alqı-satqısı üçün birbaşa WhatsApp-dan əlaqə saxlayın.<br>
-                Təhlükəsiz və sürətli xidmət.
-            </p>
-            <a href="https://wa.me/994513084409?text=Salam,%20YELO%20SHOP.%20Hesab%20alq%C4%B1-satq%C4%B1s%C4%B1%20il%C9%99%20ba%C4%9Fl%C4%B1%20m%C9%99lumat%20almaq%20ist%C9%99yir%C9%99m."
-            class="btn-wa-big" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-whatsapp"></i> WhatsApp İlə Əlaqə
-        </a>
-        <p style="margin-top:16px;font-size:12px;color:var(--text-secondary);">+994 51 308 44 09</p>
-    </section>
-</div>
-
-<section>
-    <div class="payment-card">
-        <i class="fa-solid fa-credit-card payment-icon"></i>
-        <div class="payment-details">
-            <p class="payment-label">Bank Kartı</p>
-            <p class="payment-card-number">5411 2498 1204 7533</p>
-            <p class="payment-bank">UNIBANK</p>
+                <div class="selection-summary" id="selectionSummaryUC"><i class="fa-solid fa-receipt"></i> Seçilmiş paket, Oyunçu ID və Qəbz birlikdə göndəriləcək</div>
+                <button class="btn-submit" id="submitBtnUC" onclick="submitOrder('uc')">
+                    <span class="spinner"></span>
+                    <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
+                </button>
+            </section>
         </div>
-        <button class="copy-btn" id="copyCardBtn" onclick="copyCardNumber()"><i class="fa-solid fa-copy"></i> Kopyala</button>
-    </div>
-    <div class="payment-card">
-        <i class="fa-solid fa-mobile-screen payment-icon"></i>
-        <div class="payment-details">
-            <p class="payment-label">M10</p>
-            <p class="payment-card-number">051 308 44 09</p>
-            <p class="payment-bank">Nömrə ilə ödəniş</p>
+
+        <!-- KLAN TAB -->
+        <div class="tab-content" id="tab-klan">
+            <section class="packages-section">
+                <h2 class="section-title"><i class="fa-solid fa-shield-halved" style="color:var(--gold);"></i> KLAN Səviyyələri</h2>
+                <p class="section-subtitle">İstədiyiniz klan səviyyəsini seçin</p>
+                <div class="packages-grid" id="packagesGridKLAN"></div>
+                <div class="selected-package-display" id="selectedPackageDisplayKLAN"><i class="fa-solid fa-box-open"></i> Hələ səviyyə seçilməyib</div>
+            </section>
+            <section class="form-section">
+                <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
+                <p class="section-subtitle" style="margin-bottom:18px;">Telefon nömrənizi daxil edin</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="klanPhone"><i class="fa-solid fa-mobile-screen-button"></i> Telefon Nömrəsi</label>
+                        <input type="tel" class="form-input" id="klanPhone" placeholder="Məs: 0513084409" maxlength="15">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
+                        <div class="upload-area" id="uploadAreaKLAN" onclick="document.getElementById('receiptInputKLAN').click()">
+                            <div class="upload-placeholder-group">
+                                <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                                <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
+                                <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
+                            </div>
+                            <img class="upload-preview" id="uploadPreviewKLAN" alt="Önizləmə">
+                            <button class="remove-upload" id="removeUploadKLAN"><i class="fa-solid fa-times"></i></button>
+                        </div>
+                        <input type="file" id="receiptInputKLAN" accept="image/png,image/jpeg,image/jpg" style="display:none">
+                    </div>
+                </div>
+                <div class="selection-summary" id="selectionSummaryKLAN"><i class="fa-solid fa-receipt"></i> Seçilmiş səviyyə, Telefon və Qəbz birlikdə göndəriləcək</div>
+                <button class="btn-submit" id="submitBtnKLAN" onclick="submitOrder('klan')">
+                    <span class="spinner"></span>
+                    <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
+                </button>
+            </section>
         </div>
-        <button class="copy-btn" id="copyM10Btn" onclick="copyM10Number()"><i class="fa-solid fa-copy"></i> Kopyala</button>
+
+        <!-- TIKTOK TAB -->
+        <div class="tab-content" id="tab-tiktok">
+            <section class="packages-section">
+                <h2 class="section-title"><i class="fab fa-tiktok" style="color:#ff0050;"></i> TikTok Xidmətləri</h2>
+                <p class="section-subtitle">Xidmət növü və miqdar seçin</p>
+                <div class="type-toggle-row" id="tiktokTypeRow">
+                    <button class="type-toggle-btn active" data-tt="beyeni"><i class="fa-solid fa-thumbs-up"></i> Bəyəni</button>
+                    <button class="type-toggle-btn" data-tt="takib"><i class="fa-solid fa-user-plus"></i> Takib</button>
+                </div>
+                <div class="packages-grid" id="packagesGridTIKTOK"></div>
+                <div class="selected-package-display" id="selectedPackageDisplayTIKTOK"><i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib</div>
+            </section>
+            <section class="form-section">
+                <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
+                <p class="section-subtitle" style="margin-bottom:18px;">Linki daxil edin</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="tiktokLink"><i class="fa-solid fa-link"></i> <span id="tiktokLinkLabel">Video Linki</span></label>
+                        <input type="text" class="form-input" id="tiktokLink" placeholder="https://www.tiktok.com/..." maxlength="300">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
+                        <div class="upload-area" id="uploadAreaTIKTOK" onclick="document.getElementById('receiptInputTIKTOK').click()">
+                            <div class="upload-placeholder-group">
+                                <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                                <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
+                                <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
+                            </div>
+                            <img class="upload-preview" id="uploadPreviewTIKTOK" alt="Önizləmə">
+                            <button class="remove-upload" id="removeUploadTIKTOK"><i class="fa-solid fa-times"></i></button>
+                        </div>
+                        <input type="file" id="receiptInputTIKTOK" accept="image/png,image/jpeg,image/jpg" style="display:none">
+                    </div>
+                </div>
+                <div class="selection-summary" id="selectionSummaryTIKTOK"><i class="fa-solid fa-receipt"></i> Seçilmiş xidmət, miqdar, link və qəbz birlikdə göndəriləcək</div>
+                <button class="btn-submit" id="submitBtnTIKTOK" onclick="submitOrder('tiktok')">
+                    <span class="spinner"></span>
+                    <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
+                </button>
+            </section>
+        </div>
+
+        <!-- INSTAGRAM TAB -->
+        <div class="tab-content" id="tab-instagram">
+            <section class="packages-section">
+                <h2 class="section-title"><i class="fab fa-instagram" style="color:#e1306c;"></i> Instagram Xidmətləri</h2>
+                <p class="section-subtitle">Xidmət növü və miqdar seçin</p>
+                <div class="type-toggle-row" id="instaTypeRow">
+                    <button class="type-toggle-btn active insta-active" data-ig="beyeni"><i class="fa-solid fa-heart"></i> Bəyəni</button>
+                    <button class="type-toggle-btn" data-ig="takib"><i class="fa-solid fa-user-plus"></i> Takib</button>
+                </div>
+                <div class="packages-grid" id="packagesGridINSTAGRAM"></div>
+                <div class="selected-package-display" id="selectedPackageDisplayINSTAGRAM"><i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib</div>
+            </section>
+            <section class="form-section">
+                <h2 class="section-title" style="font-size:18px;margin-bottom:6px;"><i class="fa-solid fa-file-signature"></i> Sifariş Forması</h2>
+                <p class="section-subtitle" style="margin-bottom:18px;">Linki daxil edin</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="instaLink"><i class="fa-solid fa-link"></i> <span id="instaLinkLabel">Post Linki</span></label>
+                        <input type="text" class="form-input" id="instaLink" placeholder="https://www.instagram.com/..." maxlength="300">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-camera"></i> Qəbz Şəkli</label>
+                        <div class="upload-area" id="uploadAreaINSTAGRAM" onclick="document.getElementById('receiptInputINSTAGRAM').click()">
+                            <div class="upload-placeholder-group">
+                                <span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                                <span class="upload-text">Qəbz şəklini bura klikləyib yükləyin</span>
+                                <span class="upload-hint">PNG, JPG, JPEG • Max 10MB</span>
+                            </div>
+                            <img class="upload-preview" id="uploadPreviewINSTAGRAM" alt="Önizləmə">
+                            <button class="remove-upload" id="removeUploadINSTAGRAM"><i class="fa-solid fa-times"></i></button>
+                        </div>
+                        <input type="file" id="receiptInputINSTAGRAM" accept="image/png,image/jpeg,image/jpg" style="display:none">
+                    </div>
+                </div>
+                <div class="selection-summary" id="selectionSummaryINSTAGRAM"><i class="fa-solid fa-receipt"></i> Seçilmiş xidmət, miqdar, link və qəbz birlikdə göndəriləcək</div>
+                <button class="btn-submit" id="submitBtnINSTAGRAM" onclick="submitOrder('instagram')">
+                    <span class="spinner"></span>
+                    <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Göndər</span>
+                </button>
+            </section>
+        </div>
+
+        <!-- HESAB TAB -->
+        <div class="tab-content" id="tab-hesab">
+            <section class="hebab-contact-card">
+                <h2 class="section-title" style="margin-bottom:10px;"><i class="fa-solid fa-arrows-rotate"></i> Hesab Alqı-Satqısı</h2>
+                <p class="section-subtitle" style="margin-bottom:24px;">
+                    PUBG hesab alqı-satqısı üçün birbaşa WhatsApp-dan əlaqə saxlayın.<br>
+                    Təhlükəsiz və sürətli xidmət.
+                </p>
+                <a href="https://wa.me/994513084409?text=Salam,%20YELO%20SHOP.%20Hesab%20alq%C4%B1-satq%C4%B1s%C4%B1%20il%C9%99%20ba%C4%9Fl%C4%B1%20m%C9%99lumat%20almaq%20ist%C9%99yir%C9%99m."
+                   class="btn-wa-big" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-whatsapp"></i> WhatsApp İlə Əlaqə
+                </a>
+                <p style="margin-top:16px;font-size:12px;color:var(--text-secondary);">+994 51 308 44 09</p>
+            </section>
+        </div>
+
+        <!-- PAYMENT CARDS -->
+        <section style="margin-top:24px;">
+            <div class="payment-card">
+                <i class="fa-solid fa-credit-card payment-icon"></i>
+                <div class="payment-details">
+                    <p class="payment-label">Bank Kartı</p>
+                    <p class="payment-card-number">5411 2498 1204 7533</p>
+                    <p class="payment-bank">UNIBANK</p>
+                </div>
+                <button class="copy-btn" id="copyCardBtn" onclick="copyCardNumber()"><i class="fa-solid fa-copy"></i> Kopyala</button>
+            </div>
+            <div class="payment-card">
+                <i class="fa-solid fa-mobile-screen payment-icon"></i>
+                <div class="payment-details">
+                    <p class="payment-label">M10</p>
+                    <p class="payment-card-number">051 308 44 09</p>
+                    <p class="payment-bank">Nömrə ilə ödəniş</p>
+                </div>
+                <button class="copy-btn" id="copyM10Btn" onclick="copyM10Number()"><i class="fa-solid fa-copy"></i> Kopyala</button>
+            </div>
+        </section>
+
+        <footer class="footer">
+            © 2026 <span>YELO SHOP</span> • Bütün hüquqlar qorunur • +994 51 308 44 09<br>
+            Developer — Hüseyn Məmmədov • +994 50 252 92 72
+        </footer>
     </div>
-</section>
 
-<footer class="footer">
-    © 2026 <span>YELO SHOP</span> • Bütün hüquqlar qorunur • +994 51 308 44 09 • Developer - Hüseyn Məmmədov • +994 50 252 92 72
-</footer>
-</div>
+    <script>
+        const BOT_TOKEN = '8733799869:AAEwzqP_pUtzOr-BkZHGbeDfjz7OgCpAl8M';
+        const CHAT_IDS  = ['6436992668', '5842411160'];
 
-<script>
-    const BOT_TOKEN = '8733799869:AAEwzqP_pUtzOr-BkZHGbeDfjz7OgCpAl8M';
-    const CHAT_IDS = ['6436992668', '5842411160'];
+        const ucPackages = [
+            { uc:60,    price:2,   badge:null },
+            { uc:120,   price:4,   badge:null },
+            { uc:180,   price:5,   badge:'Populyar' },
+            { uc:325,   price:9,   badge:null },
+            { uc:385,   price:11,  badge:null },
+            { uc:660,   price:17,  badge:'Əla Təklif' },
+            { uc:720,   price:19,  badge:null },
+            { uc:1045,  price:26,  badge:null },
+            { uc:1320,  price:33,  badge:'Best' },
+            { uc:1800,  price:39,  badge:null },
+            { uc:1980,  price:44,  badge:null },
+            { uc:3850,  price:79,  badge:'Premium' },
+            { uc:8100,  price:150, badge:'Maksimum' }
+        ];
+        const klanPackages = [
+            { level:7, price:15 }, { level:8, price:20 },
+            { level:9, price:25 }, { level:10, price:30 }
+        ];
+        const tiktokBeyeniPackages = [
+            { quantity:1000,  price:0.80 }, { quantity:2000,  price:1.50 },
+            { quantity:3000,  price:2.00 }, { quantity:5000,  price:4.00 },
+            { quantity:10000, price:7.00 }
+        ];
+        const tiktokTakibPackages = [
+            { quantity:1000,  price:7.50  }, { quantity:2000,  price:12.00 },
+            { quantity:3000,  price:16.00 }, { quantity:5000,  price:22.00 },
+            { quantity:10000, price:40.00 }, { quantity:15000, price:55.00 },
+            { quantity:20000, price:65.00 }
+        ];
+        const instagramBeyeniPackages = [
+            { quantity:1000,  price:2.00  }, { quantity:5000,  price:8.00  },
+            { quantity:10000, price:15.00 }, { quantity:20000, price:25.00 },
+            { quantity:30000, price:30.00 }, { quantity:50000, price:40.00 }
+        ];
+        const instagramTakibPackages = [
+            { quantity:3000,   price:10.00  }, { quantity:5000,   price:15.00  },
+            { quantity:10000,  price:23.00  }, { quantity:20000,  price:37.00  },
+            { quantity:50000,  price:79.00  }, { quantity:100000, price:149.00 }
+        ];
 
-    const ucPackages = [
-        { uc: 60, price: 2, badge: null }, { uc: 120, price: 4, badge: null },
-        { uc: 180, price: 5, badge: 'Populyar' }, { uc: 325, price: 9, badge: null },
-        { uc: 385, price: 11, badge: null }, { uc: 660, price: 17, badge: 'Əla Təklif' },
-        { uc: 720, price: 19, badge: null }, { uc: 1045, price: 26, badge: null },
-        { uc: 1320, price: 33, badge: 'Best' }, { uc: 1800, price: 39, badge: null },
-        { uc: 1980, price: 44, badge: null }, { uc: 3850, price: 79, badge: 'Premium' },
-        { uc: 8100, price: 150, badge: 'Maksimum' }
-    ];
-    const klanPackages = [
-        { level: 7, price: 15 }, { level: 8, price: 20 },
-        { level: 9, price: 25 }, { level: 10, price: 30 }
-    ];
-    const tiktokBeyeniPackages = [
-        { quantity: 1000, price: 0.80 }, { quantity: 2000, price: 1.50 },
-        { quantity: 3000, price: 2.00 }, { quantity: 5000, price: 4.00 },
-        { quantity: 10000, price: 7.00 }
-    ];
-    const tiktokTakibPackages = [
-        { quantity: 1000, price: 7.50 }, { quantity: 2000, price: 12.00 },
-        { quantity: 3000, price: 16.00 }, { quantity: 5000, price: 22.00 },
-        { quantity: 10000, price: 40.00 }, { quantity: 15000, price: 55.00 },
-        { quantity: 20000, price: 65.00 }
-    ];
-    const instagramBeyeniPackages = [
-        { quantity: 1000, price: 2.00 }, { quantity: 5000, price: 8.00 },
-        { quantity: 10000, price: 15.00 }, { quantity: 20000, price: 25.00 },
-        { quantity: 30000, price: 30.00 }, { quantity: 50000, price: 40.00 }
-    ];
-    const instagramTakibPackages = [
-        { quantity: 3000, price: 10.00 }, { quantity: 5000, price: 15.00 },
-        { quantity: 10000, price: 23.00 }, { quantity: 20000, price: 37.00 },
-        { quantity: 50000, price: 79.00 }, { quantity: 100000, price: 149.00 }
-    ];
+        let currentTab   = 'uc';
+        let selectedUC   = null, receiptUC   = null;
+        let selectedKLAN = null, receiptKLAN = null;
+        let tiktokType   = 'beyeni', selectedTikTokPackage   = null, receiptTIKTOK   = null;
+        let instagramType= 'beyeni', selectedInstagramPackage= null, receiptINSTAGRAM= null;
 
-    let currentTab = 'uc';
-    let selectedUC = null, receiptUC = null;
-    let selectedKLAN = null, receiptKLAN = null;
-    let tiktokType = 'beyeni', selectedTikTokPackage = null, receiptTIKTOK = null;
-    let instagramType = 'beyeni', selectedInstagramPackage = null, receiptINSTAGRAM = null;
-
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.tab-btn');
-        if (!btn) return;
-        switchTab(btn.dataset.tab);
-    });
-    function switchTab(tab) {
-        currentTab = tab;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.getElementById('tab-' + tab).classList.add('active');
-    }
-
-    function renderUC() {
-        document.getElementById('packagesGridUC').innerHTML = ucPackages.map((p, i) => `
-            <div class="package-card" onclick="selectUC(${i}, this)">
-                <div class="check-badge"><i class="fa-solid fa-check"></i></div>
-                <div class="package-uc"><span>${p.uc}</span> UC</div>
-                <div class="package-price">${p.price} AZN</div>
-                ${p.badge ? `<div class="package-badge${['Best','Əla Təklif','Premium','Maksimum'].includes(p.badge)?' best':''}">${p.badge}</div>` : ''}
-            </div>
-        `).join('');
-    }
-    function selectUC(index, el) {
-        document.querySelectorAll('#packagesGridUC .package-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        selectedUC = ucPackages[index];
-        document.getElementById('selectedPackageDisplayUC').innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedUC.uc} UC</span> — <strong>${selectedUC.price} AZN</strong>`;
-        document.getElementById('selectedPackageDisplayUC').classList.add('active');
-        updateSummary('uc');
-    }
-
-    function renderKLAN() {
-        document.getElementById('packagesGridKLAN').innerHTML = klanPackages.map((p, i) => `
-            <div class="package-card" onclick="selectKLAN(${i}, this)">
-                <div class="check-badge"><i class="fa-solid fa-check"></i></div>
-                <div class="package-uc"><span>${p.level}</span> LEVEL</div>
-                <div class="package-price">${p.price} AZN</div>
-            </div>
-        `).join('');
-    }
-    function selectKLAN(index, el) {
-        document.querySelectorAll('#packagesGridKLAN .package-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        selectedKLAN = klanPackages[index];
-        document.getElementById('selectedPackageDisplayKLAN').innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedKLAN.level} LEVEL</span> — <strong>${selectedKLAN.price} AZN</strong>`;
-        document.getElementById('selectedPackageDisplayKLAN').classList.add('active');
-        updateSummary('klan');
-    }
-
-    function getTikTokPackages() { return tiktokType === 'beyeni' ? tiktokBeyeniPackages : tiktokTakibPackages; }
-    function renderTikTok() {
-        const pkgs = getTikTokPackages();
-        document.getElementById('packagesGridTIKTOK').innerHTML = pkgs.map((p, i) => `
-            <div class="package-card" onclick="selectTikTok(${i}, this)">
-                <div class="check-badge"><i class="fa-solid fa-check"></i></div>
-                <div class="package-uc"><span>${p.quantity.toLocaleString('az')}</span></div>
-                <div class="package-price">${p.price.toFixed(2)} AZN</div>
-            </div>
-        `).join('');
-        document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = `<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib`;
-        document.getElementById('selectedPackageDisplayTIKTOK').classList.remove('active');
-        selectedTikTokPackage = null;
-        updateSummary('tiktok');
-    }
-    function selectTikTok(index, el) {
-        const pkgs = getTikTokPackages();
-        document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        selectedTikTokPackage = pkgs[index];
-        const label = tiktokType === 'beyeni' ? 'Bəyəni' : 'Takib';
-        document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedTikTokPackage.quantity.toLocaleString('az')} ${label}</span> — <strong>${selectedTikTokPackage.price.toFixed(2)} AZN</strong>`;
-        document.getElementById('selectedPackageDisplayTIKTOK').classList.add('active');
-        updateSummary('tiktok');
-    }
-
-    function getInstagramPackages() { return instagramType === 'beyeni' ? instagramBeyeniPackages : instagramTakibPackages; }
-    function renderInstagram() {
-        const pkgs = getInstagramPackages();
-        document.getElementById('packagesGridINSTAGRAM').innerHTML = pkgs.map((p, i) => `
-            <div class="package-card" onclick="selectInstagram(${i}, this)">
-                <div class="check-badge"><i class="fa-solid fa-check"></i></div>
-                <div class="package-uc"><span>${p.quantity.toLocaleString('az')}</span></div>
-                <div class="package-price">${p.price.toFixed(2)} AZN</div>
-            </div>
-        `).join('');
-        document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = `<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib`;
-        document.getElementById('selectedPackageDisplayINSTAGRAM').classList.remove('active');
-        selectedInstagramPackage = null;
-        updateSummary('instagram');
-    }
-    function selectInstagram(index, el) {
-        const pkgs = getInstagramPackages();
-        document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        selectedInstagramPackage = pkgs[index];
-        const label = instagramType === 'beyeni' ? 'Bəyəni' : 'Takib';
-        document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedInstagramPackage.quantity.toLocaleString('az')} ${label}</span> — <strong>${selectedInstagramPackage.price.toFixed(2)} AZN</strong>`;
-        document.getElementById('selectedPackageDisplayINSTAGRAM').classList.add('active');
-        updateSummary('instagram');
-    }
-
-    document.getElementById('tiktokTypeRow').addEventListener('click', function(e) {
-        const btn = e.target.closest('.type-toggle-btn');
-        if (!btn) return;
-        document.querySelectorAll('#tiktokTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        tiktokType = btn.dataset.tt;
-        document.getElementById('tiktokLinkLabel').textContent = tiktokType === 'beyeni' ? 'Video Linki' : 'Profil Linki';
-        document.getElementById('tiktokLink').placeholder = tiktokType === 'beyeni' ? 'https://www.tiktok.com/@user/video/123...' : 'https://www.tiktok.com/@username';
-        renderTikTok();
-    });
-    document.getElementById('instaTypeRow').addEventListener('click', function(e) {
-        const btn = e.target.closest('.type-toggle-btn');
-        if (!btn) return;
-        document.querySelectorAll('#instaTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active', 'insta-active'));
-        btn.classList.add('active', 'insta-active');
-        instagramType = btn.dataset.ig;
-        document.getElementById('instaLinkLabel').textContent = instagramType === 'beyeni' ? 'Post Linki' : 'Profil Linki';
-        document.getElementById('instaLink').placeholder = instagramType === 'beyeni' ? 'https://www.instagram.com/p/...' : 'https://www.instagram.com/username/';
-        renderInstagram();
-    });
-
-    function setupFileUpload(prefix, inputId, previewId, areaId, textSelector, setFileFn) {
-        const inputEl = document.getElementById(inputId);
-        const previewEl = document.getElementById(previewId);
-        const areaEl = document.getElementById(areaId);
-        const textEl = document.querySelector(textSelector);
-        const removeBtn = document.getElementById(areaId.replace('uploadArea', 'removeUpload'));
-
-        function handleFunc(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            if (file.size > 10*1024*1024) return showToast('Fayl çox böyükdür!', 'error');
-            if (!['image/png','image/jpeg','image/jpg'].includes(file.type)) return showToast('Yalnız PNG, JPG, JPEG.', 'error');
-            setFileFn(file);
-            const reader = new FileReader();
-            reader.onload = ev => {
-                previewEl.src = ev.target.result;
-                areaEl.classList.add('has-file');
-                textEl.textContent = file.name;
-            };
-            reader.readAsDataURL(file);
-            updateSummary(prefix);
-        }
-        function removeFunc(e) {
-            e.stopPropagation();
-            setFileFn(null);
-            inputEl.value = '';
-            previewEl.src = '';
-            areaEl.classList.remove('has-file');
-            textEl.textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-            updateSummary(prefix);
-        }
-        inputEl.addEventListener('change', handleFunc);
-        removeBtn.addEventListener('click', removeFunc);
-        areaEl.addEventListener('dragover', e => { e.preventDefault(); areaEl.style.borderColor = '#f0b90b'; });
-        areaEl.addEventListener('dragleave', () => { areaEl.style.borderColor = setFileFn() ? '#2ecc71' : '#252530'; });
-        areaEl.addEventListener('drop', e => {
-            e.preventDefault();
-            areaEl.style.borderColor = setFileFn() ? '#2ecc71' : '#252530';
-            const file = e.dataTransfer.files[0];
-            if (file) { inputEl.files = e.dataTransfer.files; handleFunc({ target: { files: [file] } }); }
+        // ── TAB SWITCHING ──
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.tab-btn');
+            if (!btn) return;
+            switchTab(btn.dataset.tab);
         });
-    }
-
-    setupFileUpload('uc', 'receiptInputUC', 'uploadPreviewUC', 'uploadAreaUC', '#uploadAreaUC .upload-text', (f) => { receiptUC = f; return receiptUC; });
-    setupFileUpload('klan', 'receiptInputKLAN', 'uploadPreviewKLAN', 'uploadAreaKLAN', '#uploadAreaKLAN .upload-text', (f) => { receiptKLAN = f; return receiptKLAN; });
-    setupFileUpload('tiktok', 'receiptInputTIKTOK', 'uploadPreviewTIKTOK', 'uploadAreaTIKTOK', '#uploadAreaTIKTOK .upload-text', (f) => { receiptTIKTOK = f; return receiptTIKTOK; });
-    setupFileUpload('instagram', 'receiptInputINSTAGRAM', 'uploadPreviewINSTAGRAM', 'uploadAreaINSTAGRAM', '#uploadAreaINSTAGRAM .upload-text', (f) => { receiptINSTAGRAM = f; return receiptINSTAGRAM; });
-
-    function updateSummary(prefix) {
-        const summaryEl = document.getElementById('selectionSummary' + prefix.toUpperCase());
-        if (!summaryEl) return;
-        let parts = [];
-        if (prefix === 'uc' && selectedUC) {
-            parts.push(`<strong>${selectedUC.uc} UC</strong> (${selectedUC.price} AZN)`);
-            const idVal = document.getElementById('playerId').value.trim();
-            if (idVal) parts.push(`ID: <strong>${idVal}</strong>`);
-            if (receiptUC) parts.push(`Qəbz: <strong>${receiptUC.name}</strong>`);
-        }
-        if (prefix === 'klan' && selectedKLAN) {
-            parts.push(`<strong>${selectedKLAN.level} LEVEL</strong> (${selectedKLAN.price} AZN)`);
-            const ph = document.getElementById('klanPhone').value.trim();
-            if (ph) parts.push(`Tel: <strong>${ph}</strong>`);
-            if (receiptKLAN) parts.push(`Qəbz: <strong>${receiptKLAN.name}</strong>`);
-        }
-        if (prefix === 'tiktok' && selectedTikTokPackage) {
-            parts.push(`<strong>${selectedTikTokPackage.quantity.toLocaleString('az')} ${tiktokType==='beyeni'?'Bəyəni':'Takib'}</strong> (${selectedTikTokPackage.price.toFixed(2)} AZN)`);
-            const link = document.getElementById('tiktokLink').value.trim();
-            if (link) parts.push(`Link: <strong>${link}</strong>`);
-            if (receiptTIKTOK) parts.push(`Qəbz: <strong>${receiptTIKTOK.name}</strong>`);
-        }
-        if (prefix === 'instagram' && selectedInstagramPackage) {
-            parts.push(`<strong>${selectedInstagramPackage.quantity.toLocaleString('az')} ${instagramType==='beyeni'?'Bəyəni':'Takib'}</strong> (${selectedInstagramPackage.price.toFixed(2)} AZN)`);
-            const link = document.getElementById('instaLink').value.trim();
-            if (link) parts.push(`Link: <strong>${link}</strong>`);
-            if (receiptINSTAGRAM) parts.push(`Qəbz: <strong>${receiptINSTAGRAM.name}</strong>`);
-        }
-        if (parts.length) {
-            summaryEl.innerHTML = `<i class="fa-solid fa-receipt"></i> ` + parts.join(' &nbsp;|&nbsp; ');
-            summaryEl.classList.add('filled');
-        } else {
-            summaryEl.innerHTML = `<i class="fa-solid fa-receipt"></i> Bütün məlumatlar birlikdə göndəriləcək`;
-            summaryEl.classList.remove('filled');
-        }
-    }
-
-    document.getElementById('playerId').addEventListener('input', () => updateSummary('uc'));
-    document.getElementById('klanPhone').addEventListener('input', () => updateSummary('klan'));
-    document.getElementById('tiktokLink').addEventListener('input', () => updateSummary('tiktok'));
-    document.getElementById('instaLink').addEventListener('input', () => updateSummary('instagram'));
-
-    async function sendToTelegram(chatId, caption, file) {
-        const formData = new FormData();
-        formData.append('chat_id', chatId);
-        formData.append('photo', file);
-        formData.append('caption', caption);
-        formData.append('parse_mode', 'Markdown');
-        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
-        const data = await res.json();
-        if (!data.ok) {
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: caption + '\n\n⚠️ Qəbz şəkli yüklənmədi.', parse_mode: 'Markdown' })
-            });
-            return { ok: true, photoFailed: true };
-        }
-        return { ok: true, photoFailed: false };
-    }
-
-    async function submitOrder(tab) {
-        if (BOT_TOKEN === 'YOUR_BOT_TOKEN') return showToast('Bot məlumatlarını daxil edin.', 'error');
-        let caption = '', file = null;
-        const btn = document.getElementById('submitBtn' + tab.toUpperCase());
-        const btnText = btn.querySelector('.btn-text');
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('az-AZ', { day:'2-digit', month:'2-digit', year:'numeric' });
-        const timeStr = now.toLocaleTimeString('az-AZ', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-
-        if (tab === 'uc') {
-            if (!selectedUC) return showToast('UC paketi seçin!', 'error');
-            const pid = document.getElementById('playerId').value.trim();
-            if (!pid) return showToast('Oyunçu ID daxil edin!', 'error');
-            if (!receiptUC) return showToast('Qəbz şəklini yükləyin!', 'error');
-            caption = `🛒 *Yeni UC Sifarişi!*\n\n🎮 *ID:* \`${pid}\`\n💎 *UC:* ${selectedUC.uc}\n💰 *Qiymət:* ${selectedUC.price} AZN\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
-            file = receiptUC;
-        } else if (tab === 'klan') {
-            if (!selectedKLAN) return showToast('Klan səviyyəsi seçin!', 'error');
-            const phone = document.getElementById('klanPhone').value.trim();
-            if (!phone) return showToast('Telefon nömrəsini daxil edin!', 'error');
-            if (!receiptKLAN) return showToast('Qəbz şəklini yükləyin!', 'error');
-            caption = `👑 *Yeni KLAN Sifarişi!*\n\n🏰 *Səviyyə:* ${selectedKLAN.level} LEVEL\n💰 *Qiymət:* ${selectedKLAN.price} AZN\n📱 *Tel:* \`${phone}\`\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
-            file = receiptKLAN;
-        } else if (tab === 'tiktok') {
-            if (!selectedTikTokPackage) return showToast('Miqdar seçin!', 'error');
-            const link = document.getElementById('tiktokLink').value.trim();
-            if (!link) return showToast('Linki daxil edin!', 'error');
-            if (!receiptTIKTOK) return showToast('Qəbz şəklini yükləyin!', 'error');
-            caption = `🎵 *TikTok Sifarişi*\n📊 *Xidmət:* ${tiktokType==='beyeni'?'👍 Bəyəni':'👥 Takib'}\n🔢 *Miqdar:* ${selectedTikTokPackage.quantity}\n💰 *Qiymət:* ${selectedTikTokPackage.price.toFixed(2)} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
-            file = receiptTIKTOK;
-        } else if (tab === 'instagram') {
-            if (!selectedInstagramPackage) return showToast('Miqdar seçin!', 'error');
-            const link = document.getElementById('instaLink').value.trim();
-            if (!link) return showToast('Linki daxil edin!', 'error');
-            if (!receiptINSTAGRAM) return showToast('Qəbz şəklini yükləyin!', 'error');
-            caption = `📷 *Instagram Sifarişi*\n📊 *Xidmət:* ${instagramType==='beyeni'?'❤️ Bəyəni':'👥 Takib'}\n🔢 *Miqdar:* ${selectedInstagramPackage.quantity}\n💰 *Qiymət:* ${selectedInstagramPackage.price.toFixed(2)} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
-            file = receiptINSTAGRAM;
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
         }
 
-        btn.disabled = true;
-        btn.classList.add('loading');
-        btnText.innerHTML = '<span class="spinner"></span> Göndərilir...';
-
-        let globalPhotoFailed = false;
-        try {
-            for (const chatId of CHAT_IDS) {
-                const result = await sendToTelegram(chatId, caption, file);
-                if (result.photoFailed) globalPhotoFailed = true;
-            }
-            showToast(globalPhotoFailed ? 'Bəzi yerlərdə şəkil yüklənmədi.' : 'Sifariş göndərildi!', globalPhotoFailed ? 'info' : 'success');
-            resetForm(tab);
-        } catch (err) {
-            console.error(err);
-            showToast('Xəta! WhatsApp ilə əlaqə saxlayın.', 'error');
-            setTimeout(() => document.getElementById('whatsappBtn').click(), 1500);
-        } finally {
-            btn.disabled = false;
-            btn.classList.remove('loading');
-            btnText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Göndər';
+        // ── RENDER UC ──
+        function renderUC() {
+            document.getElementById('packagesGridUC').innerHTML = ucPackages.map((p, i) => `
+                <div class="package-card" onclick="selectUC(${i}, this)">
+                    <div class="check-badge"><i class="fa-solid fa-check"></i></div>
+                    <div class="package-uc"><span>${p.uc}</span> UC</div>
+                    <div class="package-price">${p.price} AZN</div>
+                    ${p.badge ? `<div class="package-badge${['Best','Əla Təklif','Premium','Maksimum'].includes(p.badge)?' best':''}">${p.badge}</div>` : ''}
+                </div>
+            `).join('');
         }
-    }
-
-    function resetForm(prefix) {
-        if (prefix === 'uc') {
-            selectedUC = null; receiptUC = null;
-            document.getElementById('playerId').value = '';
-            document.getElementById('receiptInputUC').value = '';
-            document.getElementById('uploadPreviewUC').src = '';
-            document.getElementById('uploadAreaUC').classList.remove('has-file');
-            document.querySelector('#uploadAreaUC .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+        function selectUC(index, el) {
             document.querySelectorAll('#packagesGridUC .package-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById('selectedPackageDisplayUC').innerHTML = '<i class="fa-solid fa-box-open"></i> Hələ paket seçilməyib';
-            document.getElementById('selectedPackageDisplayUC').classList.remove('active');
+            el.classList.add('selected');
+            selectedUC = ucPackages[index];
+            document.getElementById('selectedPackageDisplayUC').innerHTML =
+                `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedUC.uc} UC</span> — <strong>${selectedUC.price} AZN</strong>`;
+            document.getElementById('selectedPackageDisplayUC').classList.add('active');
             updateSummary('uc');
-        } else if (prefix === 'klan') {
-            selectedKLAN = null; receiptKLAN = null;
-            document.getElementById('klanPhone').value = '';
-            document.getElementById('receiptInputKLAN').value = '';
-            document.getElementById('uploadPreviewKLAN').src = '';
-            document.getElementById('uploadAreaKLAN').classList.remove('has-file');
-            document.querySelector('#uploadAreaKLAN .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+        }
+
+        // ── RENDER KLAN ──
+        function renderKLAN() {
+            document.getElementById('packagesGridKLAN').innerHTML = klanPackages.map((p, i) => `
+                <div class="package-card" onclick="selectKLAN(${i}, this)">
+                    <div class="check-badge"><i class="fa-solid fa-check"></i></div>
+                    <div class="package-uc"><span>${p.level}</span> LEVEL</div>
+                    <div class="package-price">${p.price} AZN</div>
+                </div>
+            `).join('');
+        }
+        function selectKLAN(index, el) {
             document.querySelectorAll('#packagesGridKLAN .package-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById('selectedPackageDisplayKLAN').innerHTML = '<i class="fa-solid fa-box-open"></i> Hələ səviyyə seçilməyib';
-            document.getElementById('selectedPackageDisplayKLAN').classList.remove('active');
+            el.classList.add('selected');
+            selectedKLAN = klanPackages[index];
+            document.getElementById('selectedPackageDisplayKLAN').innerHTML =
+                `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedKLAN.level} LEVEL</span> — <strong>${selectedKLAN.price} AZN</strong>`;
+            document.getElementById('selectedPackageDisplayKLAN').classList.add('active');
             updateSummary('klan');
-        } else if (prefix === 'tiktok') {
-            selectedTikTokPackage = null; receiptTIKTOK = null;
-            document.getElementById('tiktokLink').value = '';
-            document.getElementById('receiptInputTIKTOK').value = '';
-            document.getElementById('uploadPreviewTIKTOK').src = '';
-            document.getElementById('uploadAreaTIKTOK').classList.remove('has-file');
-            document.querySelector('#uploadAreaTIKTOK .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-            document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = '<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib';
+        }
+
+        // ── RENDER TIKTOK ──
+        function getTikTokPackages() { return tiktokType === 'beyeni' ? tiktokBeyeniPackages : tiktokTakibPackages; }
+        function renderTikTok() {
+            const pkgs = getTikTokPackages();
+            document.getElementById('packagesGridTIKTOK').innerHTML = pkgs.map((p, i) => `
+                <div class="package-card" onclick="selectTikTok(${i}, this)">
+                    <div class="check-badge"><i class="fa-solid fa-check"></i></div>
+                    <div class="package-uc"><span>${p.quantity.toLocaleString('az')}</span></div>
+                    <div class="package-price">${p.price.toFixed(2)} AZN</div>
+                </div>
+            `).join('');
+            document.getElementById('selectedPackageDisplayTIKTOK').innerHTML = `<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib`;
             document.getElementById('selectedPackageDisplayTIKTOK').classList.remove('active');
+            selectedTikTokPackage = null;
             updateSummary('tiktok');
-        } else if (prefix === 'instagram') {
-            selectedInstagramPackage = null; receiptINSTAGRAM = null;
-            document.getElementById('instaLink').value = '';
-            document.getElementById('receiptInputINSTAGRAM').value = '';
-            document.getElementById('uploadPreviewINSTAGRAM').src = '';
-            document.getElementById('uploadAreaINSTAGRAM').classList.remove('has-file');
-            document.querySelector('#uploadAreaINSTAGRAM .upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
-            document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = '<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib';
+        }
+        function selectTikTok(index, el) {
+            const pkgs = getTikTokPackages();
+            document.querySelectorAll('#packagesGridTIKTOK .package-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedTikTokPackage = pkgs[index];
+            const label = tiktokType === 'beyeni' ? 'Bəyəni' : 'Takib';
+            document.getElementById('selectedPackageDisplayTIKTOK').innerHTML =
+                `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedTikTokPackage.quantity.toLocaleString('az')} ${label}</span> — <strong>${selectedTikTokPackage.price.toFixed(2)} AZN</strong>`;
+            document.getElementById('selectedPackageDisplayTIKTOK').classList.add('active');
+            updateSummary('tiktok');
+        }
+
+        // ── RENDER INSTAGRAM ──
+        function getInstagramPackages() { return instagramType === 'beyeni' ? instagramBeyeniPackages : instagramTakibPackages; }
+        function renderInstagram() {
+            const pkgs = getInstagramPackages();
+            document.getElementById('packagesGridINSTAGRAM').innerHTML = pkgs.map((p, i) => `
+                <div class="package-card" onclick="selectInstagram(${i}, this)">
+                    <div class="check-badge"><i class="fa-solid fa-check"></i></div>
+                    <div class="package-uc"><span>${p.quantity.toLocaleString('az')}</span></div>
+                    <div class="package-price">${p.price.toFixed(2)} AZN</div>
+                </div>
+            `).join('');
+            document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML = `<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib`;
             document.getElementById('selectedPackageDisplayINSTAGRAM').classList.remove('active');
+            selectedInstagramPackage = null;
             updateSummary('instagram');
         }
-    }
+        function selectInstagram(index, el) {
+            const pkgs = getInstagramPackages();
+            document.querySelectorAll('#packagesGridINSTAGRAM .package-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedInstagramPackage = pkgs[index];
+            const label = instagramType === 'beyeni' ? 'Bəyəni' : 'Takib';
+            document.getElementById('selectedPackageDisplayINSTAGRAM').innerHTML =
+                `<i class="fa-solid fa-check-circle" style="color:var(--gold);"></i> Seçildi: <span class="highlight">${selectedInstagramPackage.quantity.toLocaleString('az')} ${label}</span> — <strong>${selectedInstagramPackage.price.toFixed(2)} AZN</strong>`;
+            document.getElementById('selectedPackageDisplayINSTAGRAM').classList.add('active');
+            updateSummary('instagram');
+        }
 
-    function copyCardNumber() {
-        navigator.clipboard.writeText('5411249812047533').then(() => {
-            const btn = document.getElementById('copyCardBtn');
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Kopyalandı!';
-            btn.classList.add('copied');
-            showToast('Kart nömrəsi kopyalandı!', 'success');
-            setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopyala'; btn.classList.remove('copied'); }, 2000);
-        }).catch(() => showToast('Kopyalama alınmadı.', 'error'));
-    }
+        // ── TYPE TOGGLES ──
+        document.getElementById('tiktokTypeRow').addEventListener('click', function(e) {
+            const btn = e.target.closest('.type-toggle-btn');
+            if (!btn) return;
+            document.querySelectorAll('#tiktokTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            tiktokType = btn.dataset.tt;
+            document.getElementById('tiktokLinkLabel').textContent = tiktokType === 'beyeni' ? 'Video Linki' : 'Profil Linki';
+            document.getElementById('tiktokLink').placeholder = tiktokType === 'beyeni' ? 'https://www.tiktok.com/@user/video/123...' : 'https://www.tiktok.com/@username';
+            renderTikTok();
+        });
+        document.getElementById('instaTypeRow').addEventListener('click', function(e) {
+            const btn = e.target.closest('.type-toggle-btn');
+            if (!btn) return;
+            document.querySelectorAll('#instaTypeRow .type-toggle-btn').forEach(b => b.classList.remove('active', 'insta-active'));
+            btn.classList.add('active', 'insta-active');
+            instagramType = btn.dataset.ig;
+            document.getElementById('instaLinkLabel').textContent = instagramType === 'beyeni' ? 'Post Linki' : 'Profil Linki';
+            document.getElementById('instaLink').placeholder = instagramType === 'beyeni' ? 'https://www.instagram.com/p/...' : 'https://www.instagram.com/username/';
+            renderInstagram();
+        });
 
-    function copyM10Number() {
-        navigator.clipboard.writeText('0513084409').then(() => {
-            const btn = document.getElementById('copyM10Btn');
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Kopyalandı!';
-            btn.classList.add('copied');
-            showToast('M10 nömrəsi kopyalandı!', 'success');
-            setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopyala'; btn.classList.remove('copied'); }, 2000);
-        }).catch(() => showToast('Kopyalama alınmadı.', 'error'));
-    }
+        // ── FILE UPLOAD SETUP ──
+        function setupFileUpload(prefix, inputId, previewId, areaId, setFileFn, getFileFn) {
+            const inputEl  = document.getElementById(inputId);
+            const previewEl= document.getElementById(previewId);
+            const areaEl   = document.getElementById(areaId);
+            const textEl   = areaEl.querySelector('.upload-text');
+            const removeBtn= areaEl.querySelector('.remove-upload');
 
-    function showToast(msg, type = 'info') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        const icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info');
-        toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
-        container.appendChild(toast);
-        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 3000);
-    }
+            function processFile(file) {
+                if (!file) return;
+                if (file.size > 10*1024*1024) return showToast('Fayl çox böyükdür! (Max 10MB)', 'error');
+                if (!['image/png','image/jpeg','image/jpg'].includes(file.type)) return showToast('Yalnız PNG, JPG, JPEG.', 'error');
+                setFileFn(file);
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    previewEl.src = ev.target.result;
+                    areaEl.classList.add('has-file');
+                    textEl.textContent = file.name;
+                };
+                reader.readAsDataURL(file);
+                updateSummary(prefix);
+            }
 
-    renderUC();
-    renderKLAN();
-    renderTikTok();
-    renderInstagram();
+            inputEl.addEventListener('change', e => processFile(e.target.files[0]));
 
-    setTimeout(() => document.getElementById('waTooltip').classList.add('visible'), 1500);
-    setTimeout(() => document.getElementById('waTooltip').classList.remove('visible'), 6000);
-</script>
+            removeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                setFileFn(null);
+                inputEl.value = '';
+                previewEl.src = '';
+                areaEl.classList.remove('has-file');
+                textEl.textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+                updateSummary(prefix);
+            });
+
+            areaEl.addEventListener('dragover', e => { e.preventDefault(); areaEl.style.borderColor = '#f0b90b'; });
+            areaEl.addEventListener('dragleave', () => { areaEl.style.borderColor = getFileFn() ? '#2ecc71' : '#252530'; });
+            areaEl.addEventListener('drop', e => {
+                e.preventDefault();
+                areaEl.style.borderColor = getFileFn() ? '#2ecc71' : '#252530';
+                processFile(e.dataTransfer.files[0]);
+            });
+        }
+
+        setupFileUpload('uc',        'receiptInputUC',        'uploadPreviewUC',        'uploadAreaUC',
+            f => { receiptUC = f; },       () => receiptUC);
+        setupFileUpload('klan',      'receiptInputKLAN',      'uploadPreviewKLAN',      'uploadAreaKLAN',
+            f => { receiptKLAN = f; },     () => receiptKLAN);
+        setupFileUpload('tiktok',    'receiptInputTIKTOK',    'uploadPreviewTIKTOK',    'uploadAreaTIKTOK',
+            f => { receiptTIKTOK = f; },   () => receiptTIKTOK);
+        setupFileUpload('instagram', 'receiptInputINSTAGRAM', 'uploadPreviewINSTAGRAM', 'uploadAreaINSTAGRAM',
+            f => { receiptINSTAGRAM = f; }, () => receiptINSTAGRAM);
+
+        // ── LIVE SUMMARY UPDATE ──
+        function updateSummary(prefix) {
+            const summaryEl = document.getElementById('selectionSummary' + prefix.toUpperCase());
+            if (!summaryEl) return;
+            let parts = [];
+            if (prefix === 'uc' && selectedUC) {
+                parts.push(`<strong>${selectedUC.uc} UC</strong> (${selectedUC.price} AZN)`);
+                const id = document.getElementById('playerId').value.trim();
+                if (id) parts.push(`ID: <strong>${id}</strong>`);
+                if (receiptUC) parts.push(`Qəbz: <strong>${receiptUC.name}</strong>`);
+            }
+            if (prefix === 'klan' && selectedKLAN) {
+                parts.push(`<strong>${selectedKLAN.level} LEVEL</strong> (${selectedKLAN.price} AZN)`);
+                const ph = document.getElementById('klanPhone').value.trim();
+                if (ph) parts.push(`Tel: <strong>${ph}</strong>`);
+                if (receiptKLAN) parts.push(`Qəbz: <strong>${receiptKLAN.name}</strong>`);
+            }
+            if (prefix === 'tiktok' && selectedTikTokPackage) {
+                parts.push(`<strong>${selectedTikTokPackage.quantity.toLocaleString('az')} ${tiktokType==='beyeni'?'Bəyəni':'Takib'}</strong> (${selectedTikTokPackage.price.toFixed(2)} AZN)`);
+                const link = document.getElementById('tiktokLink').value.trim();
+                if (link) parts.push(`Link: <strong>${link}</strong>`);
+                if (receiptTIKTOK) parts.push(`Qəbz: <strong>${receiptTIKTOK.name}</strong>`);
+            }
+            if (prefix === 'instagram' && selectedInstagramPackage) {
+                parts.push(`<strong>${selectedInstagramPackage.quantity.toLocaleString('az')} ${instagramType==='beyeni'?'Bəyəni':'Takib'}</strong> (${selectedInstagramPackage.price.toFixed(2)} AZN)`);
+                const link = document.getElementById('instaLink').value.trim();
+                if (link) parts.push(`Link: <strong>${link}</strong>`);
+                if (receiptINSTAGRAM) parts.push(`Qəbz: <strong>${receiptINSTAGRAM.name}</strong>`);
+            }
+            if (parts.length) {
+                summaryEl.innerHTML = `<i class="fa-solid fa-receipt"></i> ` + parts.join(' &nbsp;|&nbsp; ');
+                summaryEl.classList.add('filled');
+            } else {
+                summaryEl.innerHTML = `<i class="fa-solid fa-receipt"></i> Bütün məlumatlar birlikdə göndəriləcək`;
+                summaryEl.classList.remove('filled');
+            }
+        }
+        document.getElementById('playerId').addEventListener('input', () => updateSummary('uc'));
+        document.getElementById('klanPhone').addEventListener('input', () => updateSummary('klan'));
+        document.getElementById('tiktokLink').addEventListener('input', () => updateSummary('tiktok'));
+        document.getElementById('instaLink').addEventListener('input', () => updateSummary('instagram'));
+
+        // ── TELEGRAM API ──
+        async function sendToTelegram(chatId, caption, file) {
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', file);
+            formData.append('caption', caption);
+            formData.append('parse_mode', 'Markdown');
+            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:'POST', body:formData });
+            const data = await res.json();
+            if (!data.ok) {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method:'POST', headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({ chat_id:chatId, text: caption + '\n\n⚠️ Qəbz şəkli yüklənmədi.', parse_mode:'Markdown' })
+                });
+                return { ok:true, photoFailed:true };
+            }
+            return { ok:true, photoFailed:false };
+        }
+
+        // ── SUBMIT ORDER ──
+        async function submitOrder(tab) {
+            let caption = '', file = null;
+            const btn  = document.getElementById('submitBtn' + tab.toUpperCase());
+            const btnTxt = btn.querySelector('.btn-text');
+            const now  = new Date();
+            const dateStr = now.toLocaleDateString('az-AZ', { day:'2-digit', month:'2-digit', year:'numeric' });
+            const timeStr = now.toLocaleTimeString('az-AZ', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+
+            if (tab === 'uc') {
+                if (!selectedUC)    return showToast('UC paketi seçin!', 'error');
+                const pid = document.getElementById('playerId').value.trim();
+                if (!pid)           return showToast('Oyunçu ID daxil edin!', 'error');
+                if (!receiptUC)     return showToast('Qəbz şəklini yükləyin!', 'error');
+                caption = `🛒 *Yeni UC Sifarişi!*\n\n🎮 *ID:* \`${pid}\`\n💎 *UC:* ${selectedUC.uc}\n💰 *Qiymət:* ${selectedUC.price} AZN\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
+                file = receiptUC;
+            } else if (tab === 'klan') {
+                if (!selectedKLAN)  return showToast('Klan səviyyəsi seçin!', 'error');
+                const phone = document.getElementById('klanPhone').value.trim();
+                if (!phone)         return showToast('Telefon nömrəsini daxil edin!', 'error');
+                if (!receiptKLAN)   return showToast('Qəbz şəklini yükləyin!', 'error');
+                caption = `👑 *Yeni KLAN Sifarişi!*\n\n🏰 *Səviyyə:* ${selectedKLAN.level} LEVEL\n💰 *Qiymət:* ${selectedKLAN.price} AZN\n📱 *Tel:* \`${phone}\`\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
+                file = receiptKLAN;
+            } else if (tab === 'tiktok') {
+                if (!selectedTikTokPackage) return showToast('Miqdar seçin!', 'error');
+                const link = document.getElementById('tiktokLink').value.trim();
+                if (!link)          return showToast('Linki daxil edin!', 'error');
+                if (!receiptTIKTOK) return showToast('Qəbz şəklini yükləyin!', 'error');
+                caption = `🎵 *TikTok Sifarişi*\n📊 *Xidmət:* ${tiktokType==='beyeni'?'👍 Bəyəni':'👥 Takib'}\n🔢 *Miqdar:* ${selectedTikTokPackage.quantity}\n💰 *Qiymət:* ${selectedTikTokPackage.price.toFixed(2)} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
+                file = receiptTIKTOK;
+            } else if (tab === 'instagram') {
+                if (!selectedInstagramPackage) return showToast('Miqdar seçin!', 'error');
+                const link = document.getElementById('instaLink').value.trim();
+                if (!link)              return showToast('Linki daxil edin!', 'error');
+                if (!receiptINSTAGRAM)  return showToast('Qəbz şəklini yükləyin!', 'error');
+                caption = `📷 *Instagram Sifarişi*\n📊 *Xidmət:* ${instagramType==='beyeni'?'❤️ Bəyəni':'👥 Takib'}\n🔢 *Miqdar:* ${selectedInstagramPackage.quantity}\n💰 *Qiymət:* ${selectedInstagramPackage.price.toFixed(2)} AZN\n🔗 *Link:* ${link}\n📅 *Tarix:* ${dateStr}\n⏰ *Saat:* ${timeStr}`;
+                file = receiptINSTAGRAM;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btnTxt.innerHTML = 'Göndərilir...';
+
+            let globalPhotoFailed = false;
+            try {
+                for (const chatId of CHAT_IDS) {
+                    const result = await sendToTelegram(chatId, caption, file);
+                    if (result.photoFailed) globalPhotoFailed = true;
+                }
+                showToast(globalPhotoFailed ? 'Bəzi yerlərdə şəkil yüklənmədi.' : '✅ Sifariş uğurla göndərildi!', globalPhotoFailed ? 'info' : 'success');
+                resetForm(tab);
+            } catch (err) {
+                console.error(err);
+                showToast('Xəta baş verdi! WhatsApp ilə əlaqə saxlayın.', 'error');
+                setTimeout(() => document.getElementById('whatsappBtn').click(), 1500);
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                btnTxt.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Göndər';
+            }
+        }
+
+        // ── RESET FORM ──
+        function resetForm(prefix) {
+            const configs = {
+                uc:        { selectedVar: () => selectedUC = null,        receiptVar: () => receiptUC = null,        inputId:'receiptInputUC',        previewId:'uploadPreviewUC',        areaId:'uploadAreaUC',        gridId:'packagesGridUC',        displayId:'selectedPackageDisplayUC',   displayHtml:'<i class="fa-solid fa-box-open"></i> Hələ paket seçilməyib',    fieldId:'playerId'   },
+                klan:      { selectedVar: () => selectedKLAN = null,      receiptVar: () => receiptKLAN = null,      inputId:'receiptInputKLAN',      previewId:'uploadPreviewKLAN',      areaId:'uploadAreaKLAN',      gridId:'packagesGridKLAN',      displayId:'selectedPackageDisplayKLAN', displayHtml:'<i class="fa-solid fa-box-open"></i> Hələ səviyyə seçilməyib', fieldId:'klanPhone'  },
+                tiktok:    { selectedVar: () => selectedTikTokPackage = null,   receiptVar: () => receiptTIKTOK = null,    inputId:'receiptInputTIKTOK',    previewId:'uploadPreviewTIKTOK',    areaId:'uploadAreaTIKTOK',    gridId:'packagesGridTIKTOK',    displayId:'selectedPackageDisplayTIKTOK',displayHtml:'<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib',  fieldId:'tiktokLink' },
+                instagram: { selectedVar: () => selectedInstagramPackage = null, receiptVar: () => receiptINSTAGRAM = null, inputId:'receiptInputINSTAGRAM', previewId:'uploadPreviewINSTAGRAM', areaId:'uploadAreaINSTAGRAM', gridId:'packagesGridINSTAGRAM', displayId:'selectedPackageDisplayINSTAGRAM',displayHtml:'<i class="fa-solid fa-box-open"></i> Hələ miqdar seçilməyib', fieldId:'instaLink'  }
+            };
+            const cfg = configs[prefix];
+            cfg.selectedVar(); cfg.receiptVar();
+            if (cfg.fieldId) document.getElementById(cfg.fieldId).value = '';
+            document.getElementById(cfg.inputId).value = '';
+            document.getElementById(cfg.previewId).src = '';
+            const area = document.getElementById(cfg.areaId);
+            area.classList.remove('has-file');
+            area.querySelector('.upload-text').textContent = 'Qəbz şəklini bura klikləyib yükləyin';
+            document.querySelectorAll(`#${cfg.gridId} .package-card`).forEach(c => c.classList.remove('selected'));
+            const disp = document.getElementById(cfg.displayId);
+            disp.innerHTML = cfg.displayHtml;
+            disp.classList.remove('active');
+            updateSummary(prefix);
+        }
+
+        // ── COPY BUTTONS ──
+        function copyCardNumber() {
+            navigator.clipboard.writeText('5411249812047533').then(() => {
+                const btn = document.getElementById('copyCardBtn');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Kopyalandı!';
+                btn.classList.add('copied');
+                showToast('Kart nömrəsi kopyalandı!', 'success');
+                setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopyala'; btn.classList.remove('copied'); }, 2200);
+            }).catch(() => showToast('Kopyalama alınmadı.', 'error'));
+        }
+        function copyM10Number() {
+            navigator.clipboard.writeText('0513084409').then(() => {
+                const btn = document.getElementById('copyM10Btn');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Kopyalandı!';
+                btn.classList.add('copied');
+                showToast('M10 nömrəsi kopyalandı!', 'success');
+                setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopyala'; btn.classList.remove('copied'); }, 2200);
+            }).catch(() => showToast('Kopyalama alınmadı.', 'error'));
+        }
+
+        // ── TOAST ──
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info');
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentNode) toast.remove(); }, 3200);
+        }
+
+        // ── INIT ──
+        renderUC();
+        renderKLAN();
+        renderTikTok();
+        renderInstagram();
+
+        // WhatsApp tooltip auto-show
+        setTimeout(() => document.getElementById('waTooltip').classList.add('visible'), 1800);
+        setTimeout(() => document.getElementById('waTooltip').classList.remove('visible'), 6500);
+    </script>
 </body>
 </html>
